@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- MathJax for mathematical notation -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            processEscapes: true
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - NW1 - Quantifying properties</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/nw/BreastCancerNetwork.csv", filename: "BreastCancerNetwork.csv", is_binary: false}
+        ];
+        window.LESSON_PACKAGES = ['numpy', 'svgpathtools', 'plotly', 'networkx', 'pandas', 'matplotlib'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/scryptIQ_logo_dark.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./what-is-a-network.html">What is a network?</a></li><li><a href="./networkx.html">NetworkX</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-3">
+                    Quantifying properties
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-3"><li><a href="#introduction">Introduction</a></li><li><a href="#degree-distribution">Degree distribution</a></li><li><a href="#the-breast-cancer-network--bcn">The Breast Cancer Network (BCN)</a></li><li><a href="#degree-centrality">Degree centrality</a></li><li><a href="#closeness-centrality">Closeness centrality</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./graph-visualisation.html">Visualising graphs</a></li><li><a href="./ppr-visualisation-cc.html">Visualising PPR</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Networks 1</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://scryptiq.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    scryptIQ
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Quantifying properties <span class="module-tag">NW1</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Define degree, in-degree and out-degree and interpret their meaning in biological networks.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Compute and visualise degree distributions using NetworkX and matplotlib.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">Calculate and interpret degree centrality and closeness centrality as measures of node importance.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">4</span>
+                    <span class="outcome-text">Explain the intuition behind PageRank and Personalised PageRank.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">5</span>
+                    <span class="outcome-text">Apply Personalised PageRank to prioritise biologically relevant nodes within a real-world network.</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>Quantifying network structure allows us to move from simply visualising connections to measuring influence, importance and flow within complex systems. In this section, we will explore how <strong>centrality</strong> measures such as <strong>degree</strong>, <strong>closeness</strong> and <strong>Personalised PageRank</strong> provide <em>mathematical insight</em> into node <em>position</em> and functional <em>relevance</em>. Using a real <em>breast cancer protein interaction network</em> as a case study, you will learn how to compute, interpret and visualise these metrics in order to identify influential genes and better understand the structural organisation of biological networks.</p><p>In order to study a network, we can measure how its nodes are positioned using <strong>centrality scores</strong>. A centrality score is a numerical measure of how important a node is, its influence and/or its structural position within a given network.<br></p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="degree-distribution">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Degree distribution</h3>
+                        <p>In an undirected network, the term <strong>degree</strong> refers to the number of edges connected to any given node. For a directed network, a degree is subdivided to an <strong>in-degree</strong> and <strong>out-degree</strong>.</p>
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p><ul class="nested-list"><li><strong>In-degree</strong> refers to the number of incoming edges to a node.</li><br><li><strong>Out-degree</strong> refers to the number of outgoing edges from a node.</li></ul></p>
+            </div>
+        </div>
+        <p>Although the degree can be calculated rather simply by counting the number of edges connected to a given node, this may be difficult for networks that are large. To illustrate this, we will incorporate the example of the <strong>Breast Cancer Network</strong> graph, at this point in the lesson.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="the-breast-cancer-network--bcn">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>The Breast Cancer Network (BCN)</h3>
+                        <p>This is a network generated from a list of 202 mutated genes in breast cancer, identified by <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1612-0#Sec14">Repana <em>et al.</em>, 2019</a>. The resulting network was constructed from the STRING protein-protein interaction database, and its 3,696 edge weights were calculated from the evidence-based strength of interactions between its nodes. The next lesson will serve to reveal more information about constructing PPI networks based on lists of genes.<br><br>The Breast Cancer Network is given in the data folder of your repository, and is stored as a .csv file. Let&#x27;s commence by reading this into a Pandas DataFrame, as before. But before that, let&#x27;s lay out our import statements.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-16">from pandas import read_csv
+
+import networkx as nx
+
+from matplotlib.pyplot import subplots, show
+</textarea>
+            </div>
+            <div id="code-cell-16-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-17">bcn_df = read_csv(&quot;./data/BreastCancerNetwork.csv&quot;)
+
+bcn_df.head()</textarea>
+            </div>
+            <div id="code-cell-17-output" class="output"></div>
+        </div>
+        <p>Let&#x27;s then convert it into a NetworkX graph object.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-18">BC_g = nx.from_pandas_edgelist(bcn_df,
+                               source = &quot;Node1&quot;,
+                               target = &quot;Node2&quot;,
+                               edge_attr = True)</textarea>
+            </div>
+            <div id="code-cell-18-output" class="output" style="display: none;"></div>
+        </div>
+        <p>We can calculate the degree centrality of each node using the NetworkX <a href="https://networkx.org/documentation/stable/reference/generated/networkx.classes.function.degree.html"><code>degree()</code></a> function.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-19">degree = nx.degree(BC_g)
+
+# print(degree) # Use this to print everything.
+
+print(list(nx.degree(BC_g))[:10]) # This prints just the first 10 items of a list, to avoid too much output.</textarea>
+            </div>
+            <div id="code-cell-19-output" class="output"></div>
+        </div>
+        <p>The degree distribution can then be plotted using NetworkX and matplotlib to give a histogram.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-20">degs = dict(BC_g.degree()).values()
+
+fig, ax = subplots()
+
+ax.hist(degs, bins=20);
+
+ax.set_title(&quot;Degree Distribution&quot;, fontsize=20)
+ax.set_ylabel(&quot;Count&quot;, fontsize=16)
+ax.set_xlabel(&quot;Degree&quot;, fontsize=16);
+
+
+show()</textarea>
+            </div>
+            <div id="code-cell-20-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="degree-centrality">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Degree centrality</h3>
+                        
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p><strong>Degree centrality</strong> is the degree of each node normalised by the maximum possible degree that exists within the network. It can be calculated easily using the NetworkX function <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.degree_centrality.html"><code>degree_centrality()</code></a>.</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-21">degree_centrality = nx.degree_centrality(BC_g)
+
+# print(degree_centrality) # This prints everything.
+
+print(list(degree_centrality)[:10]) # This prints just the first 10 items of a list.</textarea>
+            </div>
+            <div id="code-cell-21-output" class="output"></div>
+        </div>
+        <p>As is evident from the output of the previous cell, the resulting degree centrality is given as a Python dictionary. It is then possible to convert this dictionary into a Pandas DataFrame using the <code>DataFrame.from_dict</code> function.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-22">import pandas as pd
+
+dc_df = pd.DataFrame.from_dict(degree_centrality, orient=&#x27;index&#x27;)
+
+dc_df.head()</textarea>
+            </div>
+            <div id="code-cell-22-output" class="output"></div>
+        </div>
+        <p>The resulting network can also then be ranked according the centrality score, as follows:<br></p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-23">print(dc_df.sort_values(by=[0]).head())</textarea>
+            </div>
+            <div id="code-cell-23-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="closeness-centrality">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Closeness centrality</h3>
+                        <p><strong>Closeness centrality</strong> is another topological measure that is commonly used in analysing a biological network. It measures how close a node is to all other nodes in a graph, based on the amount of flow information that can be measured crossing through a node (i.e. the shortest path). Closeness centrality is particularly useful in identifying nodes that can spread information efficiently throughout a network. In a biological context, an example might be a gene that is in the centre of a network, which is highly connected to other genes, and therefore influential to the connectivity measured across the entire network.<br><br>In NetworkX, it is possible to calculate closeness centrality using the function: <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.closeness_centrality.html"><code>closeness_centrality()</code></a>. The results of this calculation are presented, once again, in dictionary format; which w can convert into a DataFrame, as before:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-24">closeness_centrality = nx.closeness_centrality(BC_g)
+
+cc_df = pd.DataFrame.from_dict(closeness_centrality, orient=&#x27;index&#x27;)
+
+print(cc_df.head())</textarea>
+            </div>
+            <div id="code-cell-24-output" class="output"></div>
+        </div>
+        <p>PageRank is a ranking system developed by Google&#x27;s founder Larry Page in collaboration with Sergey Brin, and is used to identify the most central or interesting node in a network; conceptually, it is relatively similar to closeness centrality. However, PageRank allso accounts for whether the nodes are connected to another important node in the network.</p><h4>The London underground example</h4><p>Envision that you are newly settling into London after finding a suitable place to live, close to your workplace. You are exploring London by travelling, at random, across the city using the London Underground (Tube). You can initiate your travel from any station in the Tube network and, while travelling, you decide - by means of a dice toss - which of the neighbouring stations you would like to visit, next.<br><br>Suppose you begin this following your arrival at Angel Station. You then toss the dice to decide whether to next visit King&#x27;s Cross St. Pancras, or Old Street Station, with an equal chance of visiting each station. Your dice throw points to Old Street Station, and you proceed, accordingly. Once you arrive at Old Street, you then toss the dice again to decide whether or not to travel back to Angel, or proceed to Moorgate. In order to prevent the scenario where you get trapped in one part of the Tube network, an occasional random jump or teleportation to any station on the network, is introduced. This allows you to travel across the entire London Underground network. This process then repeats infinitely, leading to the computation of probabilities for being at a specific station, and this is represented as a PageRank score.</p><p><img src="./images/Fig_Angel_TubeMap.png" alt="" class="notebook-image"></p><p>PageRank results in a probability independent of the starting station. However, if you work at a particular station such as Angel, you may wish to live near to a station that is closely connected to Angel, and not too far away from it. In order to address this problem, we can then assign Angel a non-zero value, with other stations set to 0; this means that the PageRank algorithm is forcing you back to Angel, every time a random jump occurs. This process then repeats infinitely, and the probability for each station that you take to Angel, is calculated as a <strong>Personalised PageRank (PPR)</strong> score.</p><h4>The BCN</h4><p>In the context of a biological network, we may be interested in nodes that are highly connected to a particular gene, protein or transcription factor, for example. Using the Breast Cancer Network as an example to illustrate this, let&#x27;s explore nodes within this network that are highly connected to EGFR using the aforementioned PPR score. EGFR is an Epidermal Growth Factor Receptor - a transmembrane receptor which regulates cell growth and proliferation, in which mutations can contribute to the progression of tumours in cancers such as breast cancer.<br><br>Fistly, let us observe how we can address the teleportation customisation, using a Python dictionary.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-25">EGFR_dict = dict()
+
+for i in BC_g.nodes():
+    if i == &quot;EGFR&quot;:
+        EGFR_dict[i] = 1 ## Only assigning 1 to EGFR
+
+    else:
+        EGFR_dict[i] = 0 ## Assigning 0 to all other nodes in the network
+
+</textarea>
+            </div>
+            <div id="code-cell-25-output" class="output" style="display: none;"></div>
+        </div>
+        <p>PPR can then be calculated using the <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.link_analysis.pagerank_alg.pagerank.html"><code>pagerank</code> function in NetworkX</a>. As the results are returned in a dictionary, we can use Pandas functions to convert these into a Pandas DataFrame.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-26">EGFR_ppr = nx.pagerank(BC_g, personalization = EGFR_dict)
+
+EGFR_ppr_df = pd.DataFrame.from_dict(EGFR_ppr, orient = &quot;index&quot;)
+
+print(EGFR_ppr_df.head())</textarea>
+            </div>
+            <div id="code-cell-26-output" class="output"></div>
+        </div>
+        <p>The results are arranged alphabetically. Let&#x27;s have a look at the top 10 nodes from the EGFR PPR analysis.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-27">import matplotlib.pyplot as plt
+
+EGFR_PPR_top10 = EGFR_ppr_df.sort_values(by=[0], ascending=False).head(n = 10)
+
+plt.barh(EGFR_PPR_top10.index,
+        EGFR_PPR_top10[0],
+        color=&quot;blue&quot;)
+
+plt.xlabel(&quot;Score&quot;)
+plt.ylabel(&quot;Node&quot;)
+plt.title(&quot;EGFR PPR&quot;)
+plt.show()</textarea>
+            </div>
+            <div id="code-cell-27-output" class="output"></div>
+        </div>
+        <p>EGFR is ranked highly, as we have prioritised it in the personalisation. In biological context, we know that <a href="https://www.tandfonline.com/doi/full/10.4161/cbt.23297">EGFR, and other proteins such as p53 and PTEN</a>, are often cooperative in the initiation of tumours and their progression. Having them rank as highly as they do, is consistent with this information.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="closeness-centrality">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p>Calculate the degree centrality of Network 1, and store the result in a Pandas DataFrame.</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-28"># Download this notebook from the &#x27;Resources&#x27; section, bottom left of this page,
+# and write your code in this cell.
+
+</textarea>
+            </div>
+            <button id="run-code-cell-28" class="run-button">Run Code</button>
+            <div id="code-cell-28-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>In this sections, we moved from constructing networks to quantifying their structure using key <strong>centrality measures</strong>. We computed <strong>degree</strong>, <strong>degree centrality</strong>, and <strong>closeness centrality</strong> to assess node importance within a biological network, and explored the concept of <strong>degree distribution</strong> to understand overall connectivity patterns. We introduced <strong>PageRank</strong> and <strong>Personalised PageRank (PPR)</strong> as probabilistic ranking algorithms based on a <strong>random walk</strong> with <strong>teleportation</strong>, applying them to prioritise biologically relevant genes such as <strong>EGFR</strong> within a breast cancer interaction network. These metrics provide quantitative tools for identifying influential nodes and interpreting functional organisation in complex systems.</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./networkx.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./graph-visualisation.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    }
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Set flag to indicate all FIXED cells have been executed
+        // This is used by PDF generation to ensure all outputs are ready
+        window.allCellsExecuted = true;
+        console.log("All FIXED cells executed successfully");
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    

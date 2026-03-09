@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - NW1 - Glossary</title>
+    
+    <style>
+        /* Override sidebar styling since we're not using it */
+        body {
+            background-color: var(--background) !important;
+            color: var(--text-primary);
+            margin: 0 !important;
+            padding: 0 !important;
+            min-height: 100vh;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            flex-direction: column !important;
+        }
+
+        .main-content {
+            width: 100% !important;
+            max-width: 1200px !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+            margin: 0 auto !important;
+            position: relative !important;
+            left: auto !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        /* Additional centering overrides */
+        #main-content {
+            margin-left: auto !important;
+            margin-right: auto !important;
+            text-align: left !important;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo-container img {
+            width: clamp(60px, 10vw, 120px);
+            height: clamp(60px, 10vw, 120px);
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glossary-entry {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .glossary-entry:last-child {
+            border-bottom: none;
+        }
+
+        .glossary-term {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--remember);
+            margin-bottom: 8px;
+        }
+
+        .glossary-definition {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .logo-container img {
+                height: 60px;
+            }
+            
+            .glossary-term {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-content" class="main-content">
+        <div class="top-navbar">
+            <div class="logo-container">
+                <h1 class="page-title">Networks 1 - Glossary</h1>
+            </div>
+        </div>
+
+        <div class="module-card">
+            <div class="module-header">
+                Glossary <span class="module-tag">NW1</span>
+            </div>
+            <div class="module-body">
+                
+                <div class="glossary-entry">
+                    <strong>Network (Graph)</strong>: A mathematical structure used to represent relationships between entities, consisting of nodes (vertices) and edges (links).
+                </div>
+                <div class="glossary-entry">
+                    <strong>Node (Vertex)</strong>: An individual entity within a network, such as a gene, protein or station in a transport system.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Edge (Link / Arc)</strong>: A connection between two nodes, representing a relationship or interaction.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Undirected Network</strong>: A network in which edges have no direction, implying a mutual or symmetric relationship.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Directed Network (DiGraph)</strong>: A network in which edges have direction, indicating flow from a source node to a target node.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Weighted Edge</strong>: An edge associated with a numerical value representing strength, reliability or magnitude of interaction.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Bipartite Network</strong>: A network in which nodes are divided into two distinct sets and edges only connect nodes from different sets.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Adjacency Matrix</strong>: A square matrix representation of a network where rows and columns correspond to nodes and matrix entries indicate the presence or weight of edges.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Edge List</strong>: A tabular representation of a network where each row defines a connection between two nodes, optionally including an edge weight.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Graph Object (NetworkX Graph)</strong>: A Python data structure created using NetworkX that stores nodes, edges and their attributes for analysis.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Degree</strong>: The number of edges connected to a node in an undirected network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>In-degree</strong>: The number of incoming edges to a node in a directed network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Out-degree</strong>: The number of outgoing edges from a node in a directed network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Degree Distribution</strong>: The frequency distribution of node degrees across a network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Degree Centrality</strong>: A normalised measure of how many connections a node has relative to the maximum possible number of connections.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Closeness Centrality</strong>: A measure of how close a node is to all other nodes in a network, based on shortest path distances.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Shortest Path</strong>: The minimum number of edges required to travel between two nodes.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Average Shortest Path Length</strong>: The mean shortest path distance between all pairs of nodes in a network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Centrality Score</strong>: A quantitative measure describing the structural importance or influence of a node within a network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>PageRank</strong>: A probabilistic ranking algorithm based on random walks and teleportation, used to estimate node importance.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Personalised PageRank (PPR)</strong>: A variant of PageRank that biases the random walk towards a specific node or set of nodes.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Teleportation (PageRank Context)</strong>: The random jump to any node in the network, preventing the random walk from becoming trapped.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Subgraph</strong>: A smaller network extracted from a larger graph, containing a subset of nodes and edges.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Layout Algorithm</strong>: A method used to determine the spatial arrangement of nodes when visualising a network (e.g. spring layout, spiral layout, spectral layout).
+                </div>
+                <div class="glossary-entry">
+                    <strong>Spring Layout</strong>: A force-directed layout algorithm that positions nodes based on simulated attractive and repulsive forces.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Spectral Layout</strong>: A layout method based on eigenvectors of a matrix representation of the graph.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Clustering Coefficient</strong>: A measure of the extent to which a node’s neighbours are connected to each other.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Average Clustering Coefficient</strong>: The mean clustering coefficient across all nodes in a network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Edge Connectivity</strong>: The minimum number of edges that must be removed to disconnect a network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Connected Component</strong>: A subset of nodes within a network where every node is reachable from every other node in the same subset.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Protein–Protein Interaction (PPI) Network</strong>: A biological network where nodes represent proteins and edges represent physical or functional interactions.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Gene Regulatory Network (GRN)</strong>: A directed network describing regulatory interactions between genes and transcription factors.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Network Visualisation</strong>: The graphical representation of a network structure to support interpretation of connectivity and node importance.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div>© Built with parchmentIQ copyright of scryptIQ</div>
+            <div>© L2D is copyright UCL 2025</div>
+        </div>
+    </div>
+</body>
+</html>
+        

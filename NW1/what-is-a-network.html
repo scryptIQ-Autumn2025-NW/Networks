@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- MathJax for mathematical notation -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            processEscapes: true
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
+    <!-- Syntax Highlighting with highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+    <link rel="stylesheet" href="../assets/static_output.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - NW1 - What is a network?</title>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/scryptIQ_logo_dark.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-1">
+                    What is a network?
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-1"><li><a href="#introduction">Introduction</a></li><li><a href="#what-is-a-network">What is a network?</a></li><li><a href="#undirected-network-example">Undirected network example</a></li><li><a href="#directed-network-example">Directed network example</a></li><li><a href="#bipartite-network-example">Bipartite network example</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./networkx.html">NetworkX</a></li><li><a href="./quantifying-properties.html">Quantifying properties</a></li><li><a href="./graph-visualisation.html">Visualising graphs</a></li><li><a href="./ppr-visualisation-cc.html">Visualising PPR</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Networks 1</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://scryptiq.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    scryptIQ
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    What is a network? <span class="module-tag">NW1</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Define a network in terms of nodes and edges and distinguish between directed, undirected, weighted and bipartite network graphs.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Represent networks computationally using adjacency matrices and edge lists.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">Construct and manipulate NetworkX graph objects from NumPy arrays and Pandas DataFrames.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">4</span>
+                    <span class="outcome-text">Compute and interpret core network measures including degree, degree centrality, closeness centrality and Personalised PageRank (PPR).</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">5</span>
+                    <span class="outcome-text">Visualise networks using different layout algorithms and relate quantitative metrics to biological interpretation.</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>Biological systems are inherently relational. Genes often regulate other genes, proteins interact with one another and signalling pathways transmit information through complex cascades. Networks provide a <em>mathematical framework</em> for representing and analysing these complex interactions. By representing biological entities as <strong>nodes</strong> and their relationships as <strong>edges</strong>, we can move beyond isolated components and instead study system-wide <em>structure</em>, <em>connectivity</em> and <em>influence</em>.<br><br>In this notebook, you will learn how to represent networks computationally and analyse them using Python and the <strong>NetworkX</strong> package. You will construct graphs from <strong>matrices</strong> and <strong>edge lists</strong>, quantify node importance using <strong>centrality</strong> measures and apply ranking algorithms such as <strong>Personalised PageRank</strong> to prioritise biologically relevant nodes. Throughout, the emphasis is on <em>linking</em> mathematical structure to biological meaning.</p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="what-is-a-network">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>What is a network?</h3>
+                        <p>A graph is a mathematical representation that describes the relationships between objects. A simple graph (such as the one pictured, below) typically contains two types of objects:</p>
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p><ul class="nested-list"><li><strong>Nodes</strong> - also referred to as <em>vertices</em>, these are the entities of interest.</li><br><li><strong>Edges</strong> - also referred to as <em>links</em> or <em>arcs</em>. These form the bridges between objects.</li></ul></p>
+            </div>
+        </div>
+        <p>In the pictured &#x27;simple&#x27; network, there are four nodes, connected by four edges. Notice that in this network, the edges represent simple connections, without any &#x27;flow&#x27; of signal implied. Thus, this network is referred to as an <strong>undirected network</strong>.</p><p><img src="./images/Fig_SimpleNetwork.png" alt="" class="notebook-image"></p><h4>Types of edge</h4><p>Besides representing the connections between nodes, networks can also contain other properties at both node and edge level. In the previous example, we saw that an edge can be represented as a simple connection, with undirected edges.<br><br>Let&#x27;s take a closer look at a few other types of edge:</p>
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p><ul class="nested-list"><li><strong>Undirected edges</strong>: these are simple connections, that merely link two or more nodes without an implied flow of signal. In biological data, a common example might be in protein–to-protein interaction (PPI) networks, for example. We will actually learn more about these, later in these lessons.</li><br><li><strong>Directed edges</strong>: these are connections with a clear flow of signal implied. A common biological example is in metabolic or gene regulatory networks.</li><br><li><strong>Weighted edges</strong>: these can be undirected or directed edges, and have a weight or quantitative value associated with them. As an example, these weights can conceptually represent properties such as the reliability of an interaction, the correlation between linked gene expressions, or even sequence similarity between two genes. Edges can also be weighted to reflect topological parameters, such as centrality scores and clustering.</li><br><li><strong>Bipartite edges</strong>: these entail a more complex type of edge, connecting nodes from different groups in a network. Nodes of the same type are not at all connected in a network with bipartite edges. This edge type is often used to transform biological networks to study common components across nodes, and represent complex relationships across different types of data: for instance, gene-disease and enzyme-reaction associations in metabolic pathways.</li></ul></p>
+            </div>
+        </div>
+        <h4>Node properties</h4><p>Similar to edge properties, nodes can also contain additional information other than the name of the entity. Below are a few examples of different properties nodes can have, that are commonly found in biological networks.</p>
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p><ul class="nested-list"><li><strong>Attribute</strong>: This can be a quantitative or qualitative value, and can define the characteristic of the entity in question. For instance, in a complex gene regulatory network, nodes may have group labels showing whether or not a node might be a transcription factor regulator, or a target gene. Attributes such as these, can also contain other information; anything from time and colour, through to centrality scores (a topological parameter discussed in the next bullet point).</li><br><li><strong>Topological parameters</strong>: a specific type of node attribute, topological parameters are of particular interest in this chapter, as they are mathematical properties that represent the spatial relations of nodes in a network, both globally (as in, the position of a node relative to the entire network) and locally (a node relative to other nodes to which it is directly connected). These properties are particularly important in interpreting the characteristic of the entity relative to the network, itself. Topological parameters will be discussed in more depth, further in this chapter.</li></ul></p>
+            </div>
+        </div>
+        <p>Networks are widely used in biology to represent complex relationships. We have previously referenced protein-protein interactions (PPI) as one such example, whereby nodes represent an individual protein, and the edges connected to it, represent its interactions with other proteins in the network.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="undirected-network-example">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Undirected network example</h3>
+                        <p>Continuing in this vein, let&#x27;s look at a PPI network of Granzyme B (GZMB) in humans, extracted from the STRING-DB database.</p><p><img src="./images/Fig_GZMB_Hsapiens_PPI.png" alt="" class="notebook-image"></p><p>In this diagram, we can see the PPI network centers around the GZMB protein in <em>Homo sapiens</em>, where the edges connect proteins to one another. Note that the edges here have no arrowheads on them, and thus represent an <strong>undirected</strong> network.<br><br>Granzyme B is secreted by immune cells, and mediates apoptosis (or programmed cell death). GZMB is often secreted in conjunction with another protein called perforin, which facilitates the formation of a pore in the target cell membrane. In order to trigger apoptosis, GZMB cleaves and activates initiator caspase enzymes - two such caspases are CASP3 and CASP9. Thus, the network clearly shows an interaction between GZMB and both CASP3 and CASP8. If you would like to learn more about the interactions in this network, you can find out more on <a href="https://version-12-0.string-db.org/cgi/network?networkId=bbJf3mMyJokI">STRING-DB on the following link</a>.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="directed-network-example">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Directed network example</h3>
+                        <p>As an example of a directed network, let&#x27;s take a look at the signalling regulation in Philadelpha chromsome positive Chronic Myeloid Leukemia (Ph+CML), referenced from <a href="https://pubmed.ncbi.nlm.nih.gov/25644994/">Chuang <em>et al.</em>, 2015</a>.</p><p><img src="./images/Fig_CML_Signalling.png" alt="" class="notebook-image"></p><p>In this network, key proteins and pathways dysregulated in CML are represented in capsule-shaped and rectangular nodes, respectively. Unlike the earlier GZMB PPI network example, this network contains two examples of <strong>directed</strong> interactions: activating (green) and inhibitory (red). All interactions represent a directed flow of information, indicating both the regulator and effector of the interaction.<br><br>Ph+ CML is characterised by the abnormal translocation between chromosomes 9 and 22, resulting in the fusion gene of BCR-ABL1. The presence of BCR-ABL1 leads to the upregulation of pro-survival and proliferation pathways such as JAK/STAT signalling (as indicidated by BcrAbl activating Jak2, STAT3, and STAT5 in the network shown), whist bypassing cell cycle checkpoint inhibitors in the Ras/MAPK/ERK pathway. BRC-ABL fusion also inhibits apoptosis through direct and indirect interactions with pro- and anti-apoptotic proteins. The importnace of BCR-ABL in Ph+CML drives the development of tyrosine kinase inhibitors, including lmatinib, Dastinib, and Nilotinib, to diminish CML tumour cell growth in CML patients.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="bipartite-network-example">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Bipartite network example</h3>
+                        <p>Bipartite networks are usually used to study the association between nodes of the same type. An example of such an application is referenced in <a href="https://doi.org/10.1371/journal.pone.0087797">Yang <em>et al.</em>, 2014</a>.</p><p><img src="./images/Fig_Target_Pathway_Network.png" alt="" class="notebook-image"></p><p>In this diagram, we can see a portion of one of the networks constructed in this study. The initial IncRNA-disease association network is a <strong>bipartite</strong> network, inferring the IncRNAs associated to Alzheimer&#x27;s disease (AD) and breast cancer (BC). From the bipartite network, both CDKN2B-AS1 and BC200 are associated to both AD and BC. Based on this, a IncRNA-implicated disease network can be constructed, connecting AD and BC with a <strong>weighted edge</strong> of 2. Similarly, a disease-associated IncRNA network can be constructed connecting the IncRNA nodes CDKN2B-AS1 and BC200.</p><h4>Further examples: disease spread mapping</h4><p>Networks can also be used to model how infection diseases spread. In a study published by <a href="https://www.nature.com/articles/s41598-021-83722-y">Moon &amp; Scoglio (2021)</a>, an example of a two-layer network model was used to estimate how contact tracing can impact the spread of COVID-19. The network model used comprises a mixture of both <strong>weighted</strong> and <strong>unweighted</strong>, <strong>undirected</strong> networks, with a staggering 445, 350 edges representing the individual households across Manhattan, NYC.<br><br>Another popular application of networks is the inference of gene regulatory crosstalk based on single omics or multiple omics data, or even single-cell data. This has been reviewed by <a href="https://www.nature.com/articles/s41540-023-00312-6">Kim <em>et al</em>. (2023)</a>. Tehse gene regulatory networks (GRNs) are <strong>directed</strong> and contain two types of nodes: regulators and gene targets. Capturing the regulatory activity at multi-omics or single-cell levels, allows for a deeper understanding of the regulatory activity driving cellular identity and disease.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="bipartite-network-example">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p>Match the following networks (top) to the term (bottom) that best describes the edge properties of that network.<br><img src="./images/Fig_Network_Type_DIY1.png" alt="" class="notebook-image"></p>
+            </div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>In this first section of this lesson, we introduced the foundations of <strong>network analysis</strong> by defining a <strong>network (graph)</strong> as a system of <strong>nodes</strong> and <strong>edges</strong> representing relationships between biological entities. We explored different network types, including <strong>directed</strong>, <strong>undirected</strong>, and <strong>weighted</strong> graphs, and examined how they can be represented computationally using an <strong>adjacency matrix</strong> or an <strong>edge list</strong>. Using <strong>NetworkX</strong>, we constructed graph objects from NumPy arrays and Pandas DataFrames, enabling programmatic inspection of network structure. Together, these concepts establish the framework for quantifying and interpreting connectivity patterns within complex biological systems.</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./introduction.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./networkx.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Static Notebook - Pre-executed Content</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Initialize syntax highlighting -->
+    <script>
+        // Set page ready flag immediately for PDF generation
+        window.pageReady = true;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+</html>
+    

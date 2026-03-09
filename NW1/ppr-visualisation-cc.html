@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- MathJax for mathematical notation -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            processEscapes: true
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - NW1 - Visualising PPR</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/nw/BreastCancerNetwork.csv", filename: "BreastCancerNetwork.csv", is_binary: false}
+        ];
+        window.LESSON_PACKAGES = ['numpy', 'svgpathtools', 'plotly', 'networkx', 'pandas', 'matplotlib', 'IPython'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/scryptIQ_logo_dark.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./what-is-a-network.html">What is a network?</a></li><li><a href="./networkx.html">NetworkX</a></li><li><a href="./quantifying-properties.html">Quantifying properties</a></li><li><a href="./graph-visualisation.html">Visualising graphs</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-5">
+                    Visualising PPR
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-5"><li><a href="#introduction">Introduction</a></li><li><a href="#clustering-coefficient">Clustering coefficient</a></li><li><a href="#edge-connectivity">Edge connectivity</a></li><li><a href="#shortest-path-length">Shortest path length</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Networks 1</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://scryptiq.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    scryptIQ
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Visualising PPR <span class="module-tag">NW1</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Explain how Personalised PageRank (PPR) can be interpreted as a random walk with teleportation.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Visualise PPR behaviour dynamically using matplotlib animation.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">Create and analyse subgraphs to focus on highly-ranked nodes.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">4</span>
+                    <span class="outcome-text">Apply different layout algorithms, including 2-D and 3-D layouts, to enhance structural interpretation.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">5</span>
+                    <span class="outcome-text">Compute and interpret additional structural metrics such as clustering coefficient, edge connectivity and shortest path length.</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>While <strong>centrality scores</strong> provide numerical rankings, they do <em>not</em> always convey how <em>influence</em> propagates through a network. In this section of the lesson, we will <em>visualise Personalised PageRank</em> as a <em>dynamic random walk</em>, allowing you to see how influence spreads across neighbouring nodes. You will also extend your analysis to additional structural measures such as <strong>clustering coefficient</strong>, <strong>edge connectivity</strong> and <strong>shortest path length</strong>. Together, these tools deepen your understanding of how local structure, global organisation and probabilistic flow interact within complex biological networks.</p><p>We previously explored how PPR results can be viewed using a bar chart. However, from this, it is unclear as to how the &#x27;walk&#x27; was performed.<br><br>Firstly, the two cells below, re-run code from earlier sections of the lesson, so that our variables, imports and NetworkX objects are consistent.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-40">import numpy as np
+import pandas as pd
+import networkx as nx
+
+bcn_df = pd.read_csv(&quot;./data/BreastCancerNetwork.csv&quot;)
+
+BC_g = nx.from_pandas_edgelist(bcn_df,
+                               source = &quot;Node1&quot;,
+                               target = &quot;Node2&quot;,
+                               edge_attr = True)</textarea>
+            </div>
+            <div id="code-cell-40-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-41">from matplotlib.pyplot import subplots, axes, axis, title
+import collections
+import matplotlib.pyplot as plt
+import pandas as pd
+
+## Generating the dictionary for EGFR PPR
+EGFR_dict = dict()
+for i in BC_g.nodes():
+    if i == &quot;EGFR&quot;:
+        EGFR_dict[i] = 1 ## Only assigning 1 to EGFR
+    else:
+        EGFR_dict[i] = 0 ## Assigning 0 to all other nodes in the network
+
+## Calculate PPR from EGFR
+EGFR_ppr = nx.pagerank(BC_g,
+                        personalization = EGFR_dict)
+EGFR_ppr_df = pd.DataFrame.from_dict(EGFR_ppr, orient = &quot;index&quot;)
+
+## Getting the top 10 nodes for PageRank
+EGFR_PPR_top10 = EGFR_ppr_df.sort_values(by=[0], ascending=False).head(n = 10)
+
+## Creating subplot
+fig, ax = subplots()
+
+title(&quot;EGFR PPR&quot;)
+
+## Generating the horizontal barplot
+ax.barh(EGFR_PPR_top10.index,
+        EGFR_PPR_top10[0],
+        color=&quot;blue&quot;)
+
+
+ax.set_xlabel(&quot;Score&quot;)
+ax.set_ylabel(&quot;Node&quot;)
+
+# draw graph in inset
+axes([0.4, 0.4, 0.5, 0.5])
+
+## Extract EGFR top 10 nodes to list
+EGFR_PPR_nodes = EGFR_PPR_top10.index.tolist()
+
+BC_EGFR_subgraph = BC_g.subgraph(EGFR_PPR_nodes)
+pos = nx.spring_layout(BC_EGFR_subgraph, seed=2)
+
+axis(&quot;off&quot;)
+
+# this code draws the network node
+nx.draw_networkx_nodes(BC_EGFR_subgraph, 
+                       pos, 
+                       node_size=30, 
+                       node_color=&#x27;r&#x27;,
+                       )
+## this code shows the label
+nx.draw_networkx_labels(BC_EGFR_subgraph, 
+                       pos,
+                       {lab:lab for n,lab in enumerate(EGFR_PPR_nodes) if lab in pos},
+                       font_size=10,
+                       font_color=&#x27;black&#x27;)
+# this code draws the network edge
+nx.draw_networkx_edges(BC_EGFR_subgraph, pos);
+
+plt.show()</textarea>
+            </div>
+            <div id="code-cell-41-output" class="output"></div>
+        </div>
+        <p>Let us next run a block of code that allows us to visualise the PPR of EGFR from its ten closest, neighbouring nodes.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-42">from matplotlib import animation
+from IPython.display import HTML
+import random
+
+H = BC_g
+top10 = EGFR_ppr_df.sort_values(by=[0], ascending=False).head(n = 10).index
+G = H.subgraph(top10)
+pos = nx.spectral_layout(G, dim=3)
+nodes = np.array([pos[v] for v in G.nodes()])
+edges = np.array([(pos[u], pos[v]) for u, v in G.edges()])
+
+def _frame_update(index, target_node):
+    ax.clear()
+    ax.scatter(*nodes.T, alpha=0.2, s=100, color=&quot;blue&quot;)
+    for key in pos:
+        ax.text(pos[key][0],
+                pos[key][1],
+                pos[key][2],
+                s=key)
+    for vizedge in edges:
+        ax.plot(*vizedge.T, color=&quot;gray&quot;)
+    neighbors = list(G.neighbors(target_node))
+    if index % 5 == 0:
+        node[0] = random.choice(neighbors)
+    node0 = pos[node[0]]
+    ax.scatter(*node0, alpha=1, marker=&quot;s&quot;, color=&quot;red&quot;, s=100)
+    ax.view_init(index * 0.2, index * 0.5)
+    ax.grid(False)
+    ax.set_axis_off()
+
+    # Set axis limits to zoom in on the network
+    ax.set_xlim3d(-0.8, 0.3)
+    ax.set_ylim3d(-0.5, 0.5)
+    ax.set_zlim3d(-0.5, 0.5)
+    
+    return
+
+fig = plt.figure()
+ax = fig.add_subplot(111, 
+                     projection=&quot;3d&quot;)
+ax.grid(False)
+ax.set_axis_off()
+node = [0]
+
+ani = animation.FuncAnimation(fig, 
+                              _frame_update, 
+                              interval=20, 
+                              frames=range(100), 
+                              cache_frame_data=False,
+                              fargs=(&quot;EGFR&quot;,), 
+                              repeat=True)
+
+HTML(ani.to_jshtml())</textarea>
+            </div>
+            <div id="code-cell-42-output" class="output"></div>
+        </div>
+        
+                </div>
+            </div>
+            
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Visualising PPR <span class="module-tag">NW1</span>
+                </div>
+                <div class="module-body">
+                    
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p>Use the graph layout alrogrithm called shell_layout to plot Network 2 from our example figure.</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-43"># Download this notebook from the &#x27;Resources&#x27; section, bottom left of this page,
+# and write your code in this cell.
+
+</textarea>
+            </div>
+            <button id="run-code-cell-43" class="run-button">Run Code</button>
+            <div id="code-cell-43-output" class="output"></div>
+        </div>
+        
+                </div>
+            </div>
+            
+            <div class="module-card" id="w-the-graph-with-a-third-layout-algorithm-called--random-layout---and-draw-the-graph-several-times-by-repeatedly-executing-the-code">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>w the graph with a third layout algorithm called `random_layout`, and draw the graph several times by repeatedly executing the code.</h3>
+                        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-44"></textarea>
+            </div>
+            <button id="run-code-cell-44" class="run-button">Run Code</button>
+            <div id="code-cell-44-output" class="output"></div>
+        </div>
+        <p>Draw the graph from the matrix n, created in Practise Exercise 1.1, with the layout algorithm <code>spectral_layout</code>, givint the nodes the names V, X, Y and Z.</p>
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-45"></textarea>
+            </div>
+            <button id="run-code-cell-45" class="run-button">Run Code</button>
+            <div id="code-cell-45-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="clustering-coefficient">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Clustering coefficient</h3>
+                        <p>The clustering coefficient (CC) is a measure of the degree to which nodes in a graph tend to cluster together. Clustering coefficients can range from 0 to 1, where:<br><ul class="nested-list"><li>0 - none of the node&#x27;s neighbours are connected.</li><br><li>1 - All of the node&#x27;s neighbours are connected, forming a complete clique.</li></ul>Similarly, the average CC also indicates how well the nodes in the graph are connected. As with the aforementioned centrality calculations, this can be calculated in a straightforward way for nodes in a graph. The following is a simple block of code that demonstrates how you can calculate the CC using the Breast Cancer Network example:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-46">clustering_coefficients = nx.clustering(BC_g)
+
+# Calculate the average clustering coefficient for the entire graph
+average_clustering_coefficient = nx.average_clustering(BC_g)
+
+print(f&quot;Average Clustering Coefficient: {average_clustering_coefficient}&quot;)</textarea>
+            </div>
+            <div id="code-cell-46-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="edge-connectivity">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Edge connectivity</h3>
+                        <p>Edge connectivity measures the minimum number of edges that need to be removed in order to disconnect a network graph.<br><br>For example, the Breast Cancer Network is composed of two disconnected subgraphs. Let&#x27;s calculate the edge connectivity for each of the subgraph components in this network.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-47"># Calculate edge connectivity
+for i, c in enumerate(nx.connected_components(BC_g)): 
+    
+    edge_connectivity = nx.edge_connectivity(BC_g.subgraph(c))
+    
+    print(f&quot;Subgraph size for {i} component: {len(c)}&quot;)
+    
+    print(f&quot;Edge Connectivity for {i} component: {edge_connectivity}&quot;) </textarea>
+            </div>
+            <div id="code-cell-47-output" class="output"></div>
+        </div>
+        <p>Despite the two subgraphs being very different to each other, both only needed to remove a single edge in order to disconnect the subgraph, completely.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="shortest-path-length">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Shortest path length</h3>
+                        <p>The path length refers to the distance between two nodes in a network graph, calculated as the number of edges required to get from one node to the other. More specific information about a graph can be found using measures that build on the path length, such as the shortest path length, average shortest path length, and the shortest path length from the node in question, to all reachable nodes.<br><br>For illustration, here is how we can find out the shortest path of our Breast Cancer Network graph, from node ACTG1 to AGTR2 - the top, least-connected (in terms of degree centrality) nodes in the network. The output is the sequence of nodes along this shortest path.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-48">my_shortest_paths = nx.all_shortest_paths(BC_g, 
+                                          source=&quot;ACTG1&quot;, 
+                                          target=&quot;AGTR2&quot;)
+
+for path in my_shortest_paths:
+    
+    print(path)</textarea>
+            </div>
+            <div id="code-cell-48-output" class="output"></div>
+        </div>
+        <p>There are ten possible routes to get from node ACTG1 through to AGTR2: and it is <em>via</em> two intermediate nodes.<br><br>As a single summary quantity of a network, we can find the average shortest path length, as follows.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-49">for c in nx.connected_components(BC_g): 
+    
+    print(nx.average_shortest_path_length(BC_g.subgraph(c)))</textarea>
+            </div>
+            <div id="code-cell-49-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>In this final section of the lesson, we deepened our understanding of network structure by visualising <strong>Personalised PageRank (PPR)</strong> as a dynamic <strong>random walk</strong>, revealing how influence propagates locally through neighbouring nodes. We extended our analysis to additional structural metrics, including the <strong>clustering coefficient</strong>, <strong>edge connectivity</strong>, and <strong>shortest path length</strong>, allowing us to assess modularity, robustness and global organisation within the network.<br><br>Across the entire lesson, we have progressed from defining a <strong>network (graph)</strong> and constructing it computationally with <strong>NetworkX</strong>, through quantifying node importance using <strong>centrality measures</strong>, to visualising structure and modelling probabilistic influence. This integrated workflow provides a complete foundation for analysing and interpreting complex biological networks, linking mathematical structure to biological meaning.</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./graph-visualisation.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./assignment.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    }
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Set flag to indicate all FIXED cells have been executed
+        // This is used by PDF generation to ensure all outputs are ready
+        window.allCellsExecuted = true;
+        console.log("All FIXED cells executed successfully");
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    
