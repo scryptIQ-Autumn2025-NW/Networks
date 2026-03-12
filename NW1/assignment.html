@@ -47,12 +47,7 @@
     <title>L2D - NW1 - Assignment</title>
     
     <!-- File URLs for this lesson -->
-    <script>
-        window.LESSON_FILES = [
-            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/nw/BreastCancerNetwork.csv", filename: "BreastCancerNetwork.csv", is_binary: false}
-        ];
-        window.LESSON_PACKAGES = ['numpy', 'svgpathtools', 'plotly', 'networkx', 'pandas', 'matplotlib', 'IPython'];
-    </script>
+    <script>window.LESSON_FILES = []; window.LESSON_PACKAGES = [];</script>
         
 </head>
 <body>
@@ -130,7 +125,7 @@
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Question 1</h3>
-                        <p><ol class="nested-list"><li>Experiment with the different layout algorithms, the node colour and shape, and the edge color.</li><ul><li>Using a pen and paper, draw a diagram of the PPI network.</li><br><li>Decide on the ordering of the nodes. One option is to start with the centre node, and subsequently number them in an anticlockwise direction. <em>(Hint: There are 11 nodes in total.)</em></li><br><li>Label your pen and paper diagram with the node numbers.</li><br><li>Work out all the edges in the graph. Note the numbers of the node at the start of the edge and the node at the end of the edge. <em>(Hint: There are 20 edges in total.)</em></li><br><li>Define a 11×11 matrix in Python using the NumPy <code>zeros</code> function.</li><br><li>For each edge, set the corresponding entry in the matrix to 1 (start node number corresponds to row number and end node number corresponds to column number in the adjacency matrix).</li><br><li>Define a cell array containing your node names and create a NetworkX object.</li><br><li>Experiment with the layout, colours, node shapes etc.</li></ul></ol><em>HINT: Remember to use the Python documentation, e.g. using <code>help()</code> if you have problems (alternatively use a search engine such as Google).</em></p>
+                        <p><ol class="nested-list"><li>Experiment with the different layout algorithms, the node colour and shape, and the edge color.</li><ul><li>Using a pen and paper, draw a diagram of the PPI network.</li><br><li>Decide on the ordering of the nodes. One option is to start with the centre node, and subsequently number them in an anticlockwise direction. <em>(Hint: There are 11 nodes in total.)</em></li><br><li>Label your pen and paper diagram with the node numbers.</li><br><li>Work out all the edges in the graph. Note the numbers of the node at the start of the edge and the node at the end of the edge. <em>(Hint: There are 27 edges in total.)</em></li><br><li>Define a 11×11 matrix in Python using the NumPy <code>zeros</code> function.</li><br><li>For each edge, set the corresponding entry in the matrix to 1 (start node number corresponds to row number and end node number corresponds to column number in the adjacency matrix).</li><br><li>Define a cell array containing your node names and create a NetworkX object.</li><br><li>Experiment with the layout, colours, node shapes etc.</li></ul></ol><em>HINT: Remember to use the Python documentation, e.g. using <code>help()</code> if you have problems (alternatively use a search engine such as Google).</em></p>
                     </div>
                 </div>
             </div>
