@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- MathJax for mathematical notation -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            processEscapes: true
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - NW2 - Real-world examples: BCN & PCN</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/nw/STRING_db.csv", filename: "STRING_db.csv", is_binary: false},
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/nw/Cancer_GeneList.csv", filename: "Cancer_GeneList.csv", is_binary: false}
+        ];
+        window.LESSON_PACKAGES = ['numpy', 'svgpathtools', 'plotly', 'networkx', 'pandas', 'matplotlib', 'IPython'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/scryptIQ_logo_dark.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./importing-data.html">Importing data into NetworkX</a></li><li><a href="./random-nw-generation.html">Random network generation</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-3">
+                    Real-world examples: BCN & PCN
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-3"><li><a href="#introduction">Introduction</a></li><li><a href="#identifying-key-bcn---pcn-targets">Identifying key BCN & PCN targets</a></li><li><a href="#extracting-subnetworks">Extracting subnetworks</a></li><li><a href="#node-centralities">Node centralities</a></li><li><a href="#importance-of-tp53">Importance of TP53</a></li><li><a href="#shortest-path">Shortest path</a></li><li><a href="#the-kras-tp53-axis">The KRAS/TP53 axis</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3 class="collapsible-header collapsed">
+            Previous Modules
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+            <li><a href="../NW1/introduction.html">NW1</a></li>
+        </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Networks 2</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://scryptiq.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    scryptIQ
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Real-world examples: BCN & PCN <span class="module-tag">NW2</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Construct a protein–protein interaction (PPI) network from real-world datasets using `pandas` and NetworkX</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Extract biologically relevant subnetworks based on curated gene lists</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">Quantify node importance using degree centrality, closeness centrality, and Personalised PageRank (PPR)</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">4</span>
+                    <span class="outcome-text">Compare network structure across diseases using shortest path analysis and edge weights</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">5</span>
+                    <span class="outcome-text">Interpret network-derived metrics in a biological context, linking topology to potential therapeutic targets</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>In this section, we move from synthetic examples to <strong>real-world biological networks</strong>, applying graph theory to cancer systems biology. Using curated cancer gene lists and high-confidence interactions from <strong>STRING-db</strong>, we construct disease-specific <strong>subnetworks</strong>, quantify node importance, and compare interaction structure between breast and pancreatic cancer. Through measures such as <strong>centrality</strong>, <strong>Personalised PageRank</strong>, and <strong>shortest path analysis</strong>, we explore how network topology can reveal key regulatory axes, highlight influential proteins such as <strong>TP53</strong>, and generate hypotheses about disease-specific signalling dynamics.</p><p>Between this lesson and the next, we will examine two real-world, biological examples. These are:<br><ul class="nested-list"><li>Identification of key targets in the Breast and Pancreatic Cancer Networks (BCN &amp; PCN)</li><br><li>Neural signal propagation in <em>C. elegans</em></li></ul>This lesson will focus on the first of these two examples.</p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="identifying-key-bcn---pcn-targets">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Identifying key BCN & PCN targets</h3>
+                        <p>Protein-protein interaction (PPI) networks offer a powerful approach to understanding the complex molecular mechanisms underlying diseases, including cancers. We touched on these briefly in the first Networks lesson. By mapping the interactions between proteins, researchers can identify key nodes and pathways critical to cancer progression. This network-based analysis not only highlights potential biomarkers for early diagnosis, but also reveals novel therapeutic targets. In breast and pancreatic cancers, leveraging PPI networks can uncover specific proteins that, when targeted, may disrupt cancer cell survival and proliferation, paving the way for more effective and personalised treatment strategies.<br><br>In this section, we will explore the construction of breast and pancreatic cancer networks using the genes that have been previously identified in the <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1612-0#Sec14">Network of Cancer Genes (NCG)</a>. The PPI database used is <a href="https://string-db.org/">STRING-db</a>, a database of known and predicted protein-protein interactions.<br><br>To simplify the process, all interactions used in this chapter have been filtered for high confidence scores (&gt;400) from STRING-db; we only extracted the expanded network from breast, pancreatic and non-small cell lung cancers. For a full network, please refer to the <a href="https://string-db.org/cgi/organisms"><em>Homo sapiens</em> PPI network in STRING-db</a>.<br><br>Firstly, let&#x27;s read in the (mock) STRING database network. This data is significantly reduced in size, compared to the full dataset.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-27">import pandas as pd
+
+string_db = pd.read_csv(&quot;./data/STRING_db.csv&quot;)
+
+print(string_db.head())</textarea>
+            </div>
+            <div id="code-cell-27-output" class="output"></div>
+        </div>
+        <p>Let&#x27;s then convert the entire STRING database into an undirected and weighted graph.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-28">import networkx as nx
+
+STRING_network = nx.from_pandas_edgelist(string_db,
+                               source = &quot;protein1&quot;,
+                               target = &quot;protein2&quot;,
+                               edge_attr = True)</textarea>
+            </div>
+            <div id="code-cell-28-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="info-box fact-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                FACT
+            </div>
+            <div class="box-content">
+                <p>The <strong>STRING database</strong> (<em>Search Tool for the Retrieval of Interacting Genes/Proteins</em>) is a comprehensive resource of known and predicted protein–protein interactions (PPIs). It integrates evidence from experimental data, computational predictions, co-expression studies, and text mining, assigning each interaction a confidence score. STRING is widely used to construct weighted biological networks for studying molecular pathways, disease mechanisms, and systems-level biology.</p>
+            </div>
+        </div>
+        <p>We can then check if the network is directed and weighted, using the following code.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-29">print(f&quot;Directed: {nx.is_directed(STRING_network)}&quot;)
+print(f&quot;Weighted: {nx.is_weighted(STRING_network)}&quot;)</textarea>
+            </div>
+            <div id="code-cell-29-output" class="output"></div>
+        </div>
+        <p>And we can test the number of nodes and edges using the following code.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-30">STRING_num_node = STRING_network.number_of_nodes()
+STRING_num_edge = STRING_network.number_of_edges()
+
+print(&quot;Number of nodes in STRING db:&quot;, STRING_num_node)
+print(&quot;Number of edges in STRING db:&quot;, STRING_num_edge)</textarea>
+            </div>
+            <div id="code-cell-30-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="extracting-subnetworks">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Extracting subnetworks</h3>
+                        <p>The STRING database network contains a large number of nodes and edges which may not all be relevant to breast or pancreatic cancers (the two cancers we are looking at, in this lesson). To extract related edges we must first find out which proteins are relevant to breast or pancreatic cancers. We can do this using the list of genes curated from <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1612-0#Sec14">this paper</a>. These gene lists are stored in the <code>Cancer_GeneList.csv</code> file which we will import as a Pandas DataFrame, using the following code:<br></p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-31">genelist_df = pd.read_csv(&quot;./data/Cancer_GeneList.csv&quot;)
+
+print(genelist_df.head())</textarea>
+            </div>
+            <div id="code-cell-31-output" class="output"></div>
+        </div>
+        <p>From visualising the top few rows of the DataFrame, there are a few cancers that have been included in this data. To extract the breast or pancreatic cancer gene list, we will have to filter the DataFrame, as follows.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-32">BC_genelist = genelist_df[genelist_df[&quot;primary_site&quot;] == &quot;breast&quot;][&quot;symbol&quot;].tolist()
+Pan_genelist = genelist_df[genelist_df[&quot;primary_site&quot;] == &quot;pancreas&quot;][&quot;symbol&quot;].tolist()</textarea>
+            </div>
+            <div id="code-cell-32-output" class="output" style="display: none;"></div>
+        </div>
+        <p>To create the breast cancer network, we will have to extract the relevant interactions from the STRING database network using the NetworkX function <a href="https://networkx.org/documentation/stable/reference/classes/generated/networkx.Graph.subgraph.html"><code>nx.subgraph</code></a>, with a list of the nodes of interest.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-33">BC_network = STRING_network.subgraph(BC_genelist)</textarea>
+            </div>
+            <div id="code-cell-33-output" class="output" style="display: none;"></div>
+        </div>
+        <p>And similarly using the <code>Pan_genelist</code> we created for pancreatic cancer.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-34">PC_network = STRING_network.subgraph(Pan_genelist)</textarea>
+            </div>
+            <div id="code-cell-34-output" class="output" style="display: none;"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="extracting-subnetworks">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p><ol class="nested-list"><li>Create a small network from the STRING-db PPI using the following list of genes: <code>[&quot;CASP8&quot;,&quot;TP53&quot;,&quot;FAS&quot;,&quot;MYC&quot;]</code></li><br><li>Calculate the number of edges in this network.</li></ol></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-35"># Write your code here, or, download this notebook from the &#x27;Resources&#x27; section, to have a saved version
+# Q1.1</textarea>
+            </div>
+            <button id="run-code-cell-35" class="run-button">Run Code</button>
+            <div id="code-cell-35-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-36"># Write your code here, or, download this notebook from the &#x27;Resources&#x27; section, to have a saved version
+# Q1.2</textarea>
+            </div>
+            <button id="run-code-cell-36" class="run-button">Run Code</button>
+            <div id="code-cell-36-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="node-centralities">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Node centralities</h3>
+                        <p>Once we have extracted the networks, we can study the node properties, as we did, previously. This helps us to understand how important these nodes are, topologically, in the network.<br><br>Let&#x27;s begin by redefining the <code>draw</code> function we saw in an earlier section of this lesson.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-37">import matplotlib.colors as mcolors
+# %matplotlib inline
+
+def draw(G, pos, measures, measure_name):
+    
+    nodes = nx.draw_networkx_nodes(G, pos, node_size=250, cmap=plt.cm.plasma, 
+                                   node_color=list(measures.values()),
+                                   nodelist=measures.keys())
+    nodes.set_norm(mcolors.SymLogNorm(linthresh=0.01, linscale=1, base=10))
+    # labels = nx.draw_networkx_labels(G, pos)
+    edges = nx.draw_networkx_edges(G, pos)
+
+    plt.title(measure_name)
+    plt.colorbar(nodes)
+    plt.axis(&#x27;off&#x27;)
+    plt.show()</textarea>
+            </div>
+            <div id="code-cell-37-output" class="output" style="display: none;"></div>
+        </div>
+        <p>One of the few things we have covered is degree centrality. Let&#x27;s calculate this for the breast cancer network, and plot this network with nodes coloured by degree centrality.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-38">import matplotlib.pyplot as plt
+
+## Adding together the position of the nodes using spring layout
+pos = nx.spring_layout(BC_network, seed=675)
+
+## We can then plot the network by centrality results
+draw(BC_network, 
+     pos, 
+     nx.degree_centrality(BC_network),
+     &#x27;Breast Cancer Network Degree Centrality&#x27;)
+</textarea>
+            </div>
+            <div id="code-cell-38-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="node-centralities">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>2.</strong></p>
+                <p><ol class="nested-list"><li>Calculate the closeness centrality of each node in the pancreatic cancer network.</li><br><li>Plot the pancreatic cancer network using the <code>spring_layout</code> and draw the node colour based on the closeness centrality.</li></ol></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-39"># Write your code here, or, download this notebook from the &#x27;Resources&#x27; section, to have a saved version
+# Q2.1
+</textarea>
+            </div>
+            <button id="run-code-cell-39" class="run-button">Run Code</button>
+            <div id="code-cell-39-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-40"># Write your code here, or, download this notebook from the &#x27;Resources&#x27; section, to have a saved version
+# Q2.2
+</textarea>
+            </div>
+            <button id="run-code-cell-40" class="run-button">Run Code</button>
+            <div id="code-cell-40-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="importance-of-tp53">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Importance of TP53</h3>
+                        <p>The TP53 gene, often referred to as the &quot;guardian of the genome&quot;, plays a crucial role in cancer prevention by encoding the p53 protein;responsible for the regulation of cell division, and promoting DNA repair. When functioning correctly, p53 can induce cell cycle arrest, allowing time for DNA repair, or trigger apoptosis if the damage is irreparable. However, mutations in the TP53 gene are common in many cancers - including breast, pancreatic and lung cancers - leading to the loss of its tumor-suppressing abilities. These mutations can result in uncontrolled cell proliferation, contributing to tumor growth and metastasis. TP53 is therefore a significant focus in cancer research, with efforts aimed at restoring its normal function to inhibit cancer progression.<br><br>In this lesson, we will consider the importance of TP53 in the breast and pancreatic cancer networks. In particular, we are interested in comparing the TP53 connections between breast and pancreatic cancers. As the network constructed from STRING database is represented as an undirected network, the flow of signal (i.e. co-expression and regulation) between the connected proteins will always occur, bidirectionally. Our goal is, therefore, to explore the differences in TP53 signal propagation between the two types of cancer based on their network structure.</p><h4>PPR from TP53</h4>
+        <div class="info-box remember-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                REMEMBER
+            </div>
+            <div class="box-content">
+                <p><strong>Personalised PageRank (PPR)</strong> is a variation of the PageRank algorithm that biases the random walk process toward one or more specified <strong>seed nodes</strong>, rather than distributing probability uniformly across all nodes. It quantifies how strongly other nodes in a network are connected to, or influenced by, the chosen seed, making it particularly useful for identifying functionally related genes or proteins in biological networks.</p>
+            </div>
+        </div>
+        <p>In the previous lesson, we learned how personalised PageRank (PPR) can be used to study highly connected train stations, such as Kings Cross St. Pancras Station on the London Underground map. We then effectively applied the same algorithm to study genes that are strongly connected to, and therefore influenced by, EGFR in the Breast Cancer Network. In a similar way, we can also apply PPR to TP53, in order to understand which other proteins may be highly connected to the protein-protein interactions based on the weighted edges within the network.<br><br>To do this, we can start of with a personalisation list in the Breast cancer network.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-41">BC_dict = {}
+
+for i in BC_network.nodes():
+    if i == &quot;TP53&quot;:
+        BC_dict[i] = 1
+    else:
+        BC_dict[i] = 0</textarea>
+            </div>
+            <div id="code-cell-41-output" class="output" style="display: none;"></div>
+        </div>
+        <p>Then, we can run personalised PageRank, as follows.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-42">BC_TP53_ppr = nx.pagerank(BC_network,
+                    personalization = BC_dict)</textarea>
+            </div>
+            <div id="code-cell-42-output" class="output" style="display: none;"></div>
+        </div>
+        <p>Results of this PPR are then stored in a dictionary. We can rearrange the results to show top proteins as a DataFrame, as follows.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-43">BC_TP53_ppr_df = pd.DataFrame.from_dict(BC_TP53_ppr, orient = &quot;index&quot;)
+
+## Rearrange dataframe result 
+BC_TP53_ppr_df.columns = [&quot;TP53_PPR&quot;]
+BC_TP53_ppr_df = BC_TP53_ppr_df.sort_values(by=&#x27;TP53_PPR&#x27;, ascending=False)
+
+print(BC_TP53_ppr_df.head(n = 10))</textarea>
+            </div>
+            <div id="code-cell-43-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="importance-of-tp53">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>3.</strong></p>
+                <p><ol class="nested-list"><li>Repeat the Personalised PageRank analysis, seeding from TP53, in pancreatic cancer.</li><br><li>Rearrange the PPR results and identify the top 20 targets in the network.</li></ol></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-44"># Write your code here, or, download this notebook from the &#x27;Resources&#x27; section, to have a saved version
+# Q3.1
+</textarea>
+            </div>
+            <button id="run-code-cell-44" class="run-button">Run Code</button>
+            <div id="code-cell-44-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-45"># Write your code here, or, download this notebook from the &#x27;Resources&#x27; section, to have a saved version
+# Q3.3</textarea>
+            </div>
+            <button id="run-code-cell-45" class="run-button">Run Code</button>
+            <div id="code-cell-45-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="shortest-path">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Shortest path</h3>
+                        
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p>As we explored in the previous lesson, the network science definition for the <strong>shortest path</strong> between two nodes is the path that minimises the total distance between them. In an unweighted network, this corresponds to the smallest number of edges connecting the nodes, whereas in a weighted network it is the path with the lowest sum of edge weights.</p>
+            </div>
+        </div>
+        <p>The KRAS gene is one of the most frequently-mutated oncogenes in cancer, playing a pivotal role in driving tumor growth and progression. Mutations in KRAS lead to the continuous activation of signaling pathways that promote cell proliferation and survival, contributing to the development of cancers such as lung, colorectal, and pancreatic cancers. When KRAS mutations co-occur with TP53 mutations, the effects can be particularly aggressive. Mutant KRAS can enhance the oncogenic activities of mutant TP53, leading to increased tumor growth, metastasis and chemoresistance. This interaction underscores the complexity of cancer biology and highlights the need for targeted therapies that can address the combined effects of these mutations.<br><br>In network biology, the concept of the shortest path can be incredibly useful for studying the interactions between KRAS and TP53. In this context, the shortest path refers to the <em>minimal number interactions needed</em> to connect two proteins within the cancer network. By identifying the shortest path between KRAS and TP53, we can uncover direct and indirect interactions that may influence cancer progression. Shortest path can be helpful in mapping out how mutant KRAS might affect the function of TP53, or <em>vice versa</em>, providing insights into the combined effects of these mutations on tumor growth and metastasis. Furthermore, understanding these pathways can aid in the development of targeted therapies that specifically disrupt these critical interactions, potentially leading to more effective cancer treatments.<br><br>Let&#x27;s try and quantify this using the <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path.html#networkx.algorithms.shortest_paths.generic.shortest_path">shortest path analysis</a>, with specific application to KRAS and TP53.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-46">## Extract all the shortest paths between KRAS and TP53 in breast cancer network:
+KRAS_TP53_BC = nx.all_shortest_paths(BC_network, 
+                 source=&quot;KRAS&quot;, 
+                 target=&quot;TP53&quot;,
+                 weight = None)
+
+KRAS_TP53_BC = list(KRAS_TP53_BC)
+
+print(KRAS_TP53_BC)</textarea>
+            </div>
+            <div id="code-cell-46-output" class="output"></div>
+        </div>
+        
+        <div class="info-box note-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                NOTE
+            </div>
+            <div class="box-content">
+                <p>Here, we have specified that the keyword argument <code>weight</code> should have a value of <code>None</code>. This is because, although shortest path analysis can take into account edge weights, larger edge weights would be misinterpreted as meaning longer distance; this is because distance is calculated as the sum of the edge weights. In our network, the edge weights represent a higher confidence in interactions between the proteins, thus a stronger connection. In this scenario, the shortest path algorithm would therefore be evaluating the edge weight differently to the biological context.</p>
+            </div>
+        </div>
+        <p>To overcome this, we could summarise the edge weights through the NetworkX function <a href="https://networkx.org/documentation/stable/reference/generated/networkx.classes.function.path_weight.html"><code>nx.path_weight</code></a>.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-47">## Path weight for BC network
+path_weight = {}
+for path in KRAS_TP53_BC:
+    pw = nx.path_weight(BC_network,
+                tuple(path),
+                &quot;weight&quot;)
+    path_weight[tuple(path)] = pw
+
+## First convert the results into a dataframe
+BC_pathweight = pd.DataFrame.from_dict(path_weight, orient = &quot;index&quot;)
+BC_pathweight.columns = [&quot;weight&quot;]
+
+## Then calculate the mean value
+BC_mean_pathweight = BC_pathweight[&quot;weight&quot;].mean()
+print(BC_mean_pathweight)</textarea>
+            </div>
+            <div id="code-cell-47-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-48">## Extract the shortest paths between KRAS and TP53 in Pancreatic cancer network
+KRAS_TP53_PC= nx.all_shortest_paths(PC_network, 
+                 source=&quot;KRAS&quot;, 
+                 target=&quot;TP53&quot;,
+                  weight = None)
+KRAS_TP53_PC = list(KRAS_TP53_PC)
+KRAS_TP53_PC</textarea>
+            </div>
+            <div id="code-cell-48-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-49">## Calculate path weight for pancreatic cancer network
+path_weight = {}
+for path in KRAS_TP53_PC:
+    pw = nx.path_weight(PC_network,
+                tuple(path),
+                &quot;weight&quot;)
+    path_weight[tuple(path)] = pw
+
+## Calculate the average path weight
+PC_pathweight = pd.DataFrame.from_dict(path_weight, orient = &quot;index&quot;)
+PC_pathweight.columns = [&quot;weight&quot;]
+PC_mean_pathweight = PC_pathweight[&quot;weight&quot;].mean()
+print(PC_mean_pathweight)</textarea>
+            </div>
+            <div id="code-cell-49-output" class="output"></div>
+        </div>
+        <p>The shortest path between KRAS and TP53 is significantly shorter in breast cancer, when compared to pancreatic cancer network, suggesting shorter regulations between the two proteins between the two networks. However, analysing the average path weight reveals that the pancreatic cancer network KRAS/TP53 axis has stronger interaction confidence, when compared to the breast cancer KRAS-TP53 axis. Why would that be the case?<br><br>We only calculated the path weight without considering the path length, and a longer path is always expected to result in a higher path weight. We therefore need to bring this into consideration in our code. Thus, path weight by length is calculated, as follows:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-50">## Calculate path weight for breast cancer network
+path_weight = {}
+for path in KRAS_TP53_BC:
+    pw = nx.path_weight(BC_network,
+                tuple(path),
+                &quot;weight&quot;)
+    path_length = len(path)-1 # path length is always equal to number of nodes - 1, ie., for path length in A-B-C will equalt to 2
+    pw_by_length = pw/path_length
+    path_weight[tuple(path)] = pw_by_length
+
+## Calculate the average path weight
+BC_pathweight = pd.DataFrame.from_dict(path_weight, orient = &quot;index&quot;)
+BC_pathweight.columns = [&quot;weight&quot;]
+BC_mean_pathweight = BC_pathweight[&quot;weight&quot;].mean()
+print(BC_mean_pathweight)</textarea>
+            </div>
+            <div id="code-cell-50-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-51">## Calculate path weight for pancreatic cancer network
+path_weight = {}
+for path in KRAS_TP53_PC:
+    pw = nx.path_weight(PC_network,
+                tuple(path),
+                &quot;weight&quot;)
+    path_length = len(path)-1 # path length is always equal to number of nodes - 1, ie., for path length in A-B-C will equalt to 2
+    pw_by_length = pw/path_length
+    path_weight[tuple(path)] = pw_by_length
+
+## Calculate the average path weight
+PC_pathweight = pd.DataFrame.from_dict(path_weight, orient = &quot;index&quot;)
+PC_pathweight.columns = [&quot;weight&quot;]
+PC_mean_pathweight = PC_pathweight[&quot;weight&quot;].mean()
+print(PC_mean_pathweight)</textarea>
+            </div>
+            <div id="code-cell-51-output" class="output"></div>
+        </div>
+        <p>By considering the path length in the calculation, we can now confirm that there is a higher confidence in the KRAS-TP53 interaction axis in the pancreatic network, when comparing this to the breast cancer network. Based on these networks, we can therefore speculate that regulating KRAS expression may have a bigger impact on TP53 expression in pancreatic cancer than in breast cancer.<br><br>In fact, KRAS mutations are highly prevalent in pancreatic cancer, particularly in pancreatic ductal adenocarcinoma (PDAC), where they occur in approximately 95% of cases. Conversely, KRAS mutations are less common in breast cancer; and targeting the downstream pathways activated by KRAS (such as the MAPK pathway) has shown more promise.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="shortest-path">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>4.</strong></p>
+                <p><ol class="nested-list"><li>Repeat the above analysis, but this time between BRCA1 to TP53, in the breast cancer network. What is the average shortest path weight?</li><br><li>What is the average shortest path weight by path length?</li></ol></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-52"># Write your code here, or, download this notebook from the &#x27;Resources&#x27; section, to have a saved version
+# Q4.1
+</textarea>
+            </div>
+            <button id="run-code-cell-52" class="run-button">Run Code</button>
+            <div id="code-cell-52-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-53"># Write your code here, or, download this notebook from the &#x27;Resources&#x27; section, to have a saved version
+# Q4.2</textarea>
+            </div>
+            <button id="run-code-cell-53" class="run-button">Run Code</button>
+            <div id="code-cell-53-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="the-kras-tp53-axis">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>The KRAS/TP53 axis</h3>
+                        <p>Based on the shortest path analysis we demonstrated between KRAS and TP53 in the breast cancer network, we can clearly see that some of the nodes connecting KRAS and TP53 are also ranked highly in the TP53 PPR analysis. Thus, these nodes may have an important role to the KRAS/TP53 axis in the breast cancer network. We will explore modulating this KRAS/TP53 axis, here.<br><br>Let&#x27;s now observe the impact of removing these nodes to the shortest path connection, and the PPR results of the breast cancer network.<br><br>First let&#x27;s identify the top node in the KRAS/TP53 shortest path overlapping as the top node in the PPR result.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-54"># Flatten the nested list in the shortest path analysis:
+BC_SP_nodes = [item for sublist in KRAS_TP53_BC for item in sublist]
+BC_SP_nodes = list(set(BC_SP_nodes))
+BC_SP_nodes                         </textarea>
+            </div>
+            <div id="code-cell-54-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-55"># From the list of nodes, remove KRAS and TP53, and extract their PPR scores:
+BC_SP_PPR = {}
+for node in BC_SP_nodes:
+    if node in [&quot;KRAS&quot;,&quot;TP53&quot;]:
+        continue # Skip the function
+    else: 
+        BC_SP_PPR[node] = BC_TP53_ppr[node]
+
+# Convert results to DataFrame 
+BC_SP_PPR_df = pd.DataFrame.from_dict(BC_SP_PPR,
+                                   orient = &quot;index&quot;)
+
+# Sort DataFrame by PageRank result
+BC_SP_PPR_df = BC_SP_PPR_df.sort_values(by=0, ascending=False)
+BC_SP_PPR_df</textarea>
+            </div>
+            <div id="code-cell-55-output" class="output"></div>
+        </div>
+        <p>The top node is therefore (unsuprisingly) PIK3R1. Let&#x27;s remove it from the breast cancer network, and see how this impacts the network in in regards to the KRAS/TP53 PPR.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-56"># Make a copy of the graph
+BC_network_new = BC_network.copy()
+
+# Remove a node from the copied graph
+BC_network_new.remove_node(&quot;PIK3R1&quot;)
+
+# Print the remaining nodes and edges
+print(&quot;Nodes:&quot;, BC_network_new.number_of_nodes())
+print(&quot;Edges:&quot;, BC_network_new.number_of_edges())</textarea>
+            </div>
+            <div id="code-cell-56-output" class="output"></div>
+        </div>
+        <p>Let&#x27;s repeat the PPR and shortest path analysis, as before.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-57">KRAS_TP53_dict_new_BC = {}
+for i in BC_network_new.nodes():
+    if i  == &quot;TP53&quot;:
+        KRAS_TP53_dict_new_BC[i] = 1
+    else:
+        KRAS_TP53_dict_new_BC[i] = 0
+BC_TP53_ppr_new = nx.pagerank(BC_network_new,
+                    personalization = KRAS_TP53_dict_new_BC)
+BC_TP53_ppr_new_df = pd.DataFrame.from_dict(BC_TP53_ppr_new, orient = &quot;index&quot;)
+
+## Sort by PPR result
+BC_TP53_ppr_new_df.columns = [&quot;New_PPR&quot;]
+BC_TP53_ppr_new_df = BC_TP53_ppr_new_df.sort_values(by=&#x27;New_PPR&#x27;, ascending=False)
+
+print(BC_TP53_ppr_new_df.head(n = 10))</textarea>
+            </div>
+            <div id="code-cell-57-output" class="output"></div>
+        </div>
+        <p>And explore top changes by nodes.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-58">PPR_df = pd.merge(BC_TP53_ppr_df, 
+                  BC_TP53_ppr_new_df, 
+                  left_index=True, right_index=True, ## joining by index
+                  how=&#x27;inner&#x27;) ## Makes sure only taking in common nodes
+PPR_df.columns = [&quot;PPR&quot;,&quot;New_PPR&quot;]
+PPR_df[&quot;Differences&quot;] = PPR_df[&quot;New_PPR&quot;] - PPR_df[&quot;PPR&quot;]
+
+PPR_df = PPR_df.reindex(PPR_df[&#x27;Differences&#x27;].abs().sort_values(ascending=False).index)
+
+top_changes = PPR_df.head(10).index.tolist()
+print(&quot;Top 10 nodes with most signficant changes:&quot;, top_changes)</textarea>
+            </div>
+            <div id="code-cell-58-output" class="output"></div>
+        </div>
+        <p>And repeating the shortest path analysis.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-59">KRAS_TP53_BC_new = nx.all_shortest_paths(BC_network_new, 
+                 source=&quot;KRAS&quot;, 
+                 target=&quot;TP53&quot;,
+                  weight = None)
+KRAS_TP53_BC_new = list(KRAS_TP53_BC_new)
+KRAS_TP53_BC_new</textarea>
+            </div>
+            <div id="code-cell-59-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-60"># Calculate path weight for breast cancer network
+path_weight = {}
+for path in KRAS_TP53_BC_new:
+    pw = nx.path_weight(BC_network_new,
+                tuple(path),
+                &quot;weight&quot;)
+    path_length = len(path)-1 # path length is always equal to number of nodes - 1, ie., for path length in A-B-C will equal to 2
+    pw_by_length = pw/path_length
+    path_weight[tuple(path)] = pw_by_length
+
+## Calculate the average path weight
+BC_BRCA_pathweight_new = pd.DataFrame.from_dict(path_weight, orient = &quot;index&quot;)
+BC_BRCA_pathweight_new.columns = [&quot;weight&quot;]
+BC_BRCA_mean_pathweight_new = BC_BRCA_pathweight_new[&quot;weight&quot;].mean()
+print(BC_BRCA_mean_pathweight_new)</textarea>
+            </div>
+            <div id="code-cell-60-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>In this final section of Networks 2, we apply network analysis techniques to a real-world <strong>breast cancer protein–protein interaction network</strong>, demonstrating how to construct disease-specific subnetworks from curated gene lists and the <strong>STRING database</strong>. It explores key graph-theoretic measures including <strong>degree centrality</strong>, <strong>closeness centrality</strong>, <strong>Personalised PageRank (PPR)</strong>, and <strong>shortest path analysis</strong>, using these tools to compare the structural roles of genes such as <strong>KRAS</strong> and <strong>TP53</strong>. The notebook also examines how modifying network structure, for example by removing influential nodes, alters signal propagation and connectivity, illustrating how network topology can inform biological interpretation and hypothesis generation.</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./random-nw-generation.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./assignment.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    }
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Set flag to indicate all FIXED cells have been executed
+        // This is used by PDF generation to ensure all outputs are ready
+        window.allCellsExecuted = true;
+        console.log("All FIXED cells executed successfully");
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    

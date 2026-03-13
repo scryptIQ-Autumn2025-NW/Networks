@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - NW2 - Glossary</title>
+    
+    <style>
+        /* Override sidebar styling since we're not using it */
+        body {
+            background-color: var(--background) !important;
+            color: var(--text-primary);
+            margin: 0 !important;
+            padding: 0 !important;
+            min-height: 100vh;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            flex-direction: column !important;
+        }
+
+        .main-content {
+            width: 100% !important;
+            max-width: 1200px !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+            margin: 0 auto !important;
+            position: relative !important;
+            left: auto !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        /* Additional centering overrides */
+        #main-content {
+            margin-left: auto !important;
+            margin-right: auto !important;
+            text-align: left !important;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo-container img {
+            width: clamp(60px, 10vw, 120px);
+            height: clamp(60px, 10vw, 120px);
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glossary-entry {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .glossary-entry:last-child {
+            border-bottom: none;
+        }
+
+        .glossary-term {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--remember);
+            margin-bottom: 8px;
+        }
+
+        .glossary-definition {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .logo-container img {
+                height: 60px;
+            }
+            
+            .glossary-term {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-content" class="main-content">
+        <div class="top-navbar">
+            <div class="logo-container">
+                <h1 class="page-title">Networks 2 - Glossary</h1>
+            </div>
+        </div>
+
+        <div class="module-card">
+            <div class="module-header">
+                Glossary <span class="module-tag">NW2</span>
+            </div>
+            <div class="module-body">
+                
+                <div class="glossary-entry">
+                    <strong>NetworkX</strong>: A Python library for creating, manipulating and analysing complex networks and graph structures.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Graph Object</strong>: The core NetworkX data structure representing a network, containing nodes, edges and optional attributes.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Subgraph</strong>: A smaller network extracted from a larger graph, containing a subset of nodes and the edges between them.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Layout</strong>: An algorithm that determines how nodes are positioned for visualisation (e.g. spring, random or bipartite layout).
+                </div>
+                <div class="glossary-entry">
+                    <strong>Spring Layout</strong>: A force-directed layout algorithm that positions nodes based on simulated physical forces to reveal structural patterns.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Random Layout</strong>: A layout that assigns node positions randomly, often used for quick visual inspection.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Bipartite Attribute</strong>: A node attribute used to distinguish membership of one of two disjoint node sets in a bipartite network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Random Network</strong>: A network generated using probabilistic rules rather than empirical biological data.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Seed (Random Seed)</strong>: A fixed initial value used in random number generation to ensure reproducible results.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Reproducibility</strong>: The principle that computational results should be repeatable when the same inputs and seed values are used.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Degree Centrality</strong>: A normalised measure of how many connections a node has relative to the size of the network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Closeness Centrality</strong>: A measure of how efficiently a node can reach all other nodes via shortest paths.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Personalised PageRank (PPR)</strong>: A variant of PageRank that biases influence scores towards a specified seed node.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Personalisation Dictionary</strong>: A dictionary defining which node(s) receive initial probability mass in a Personalised PageRank calculation.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Shortest Path</strong>: The minimum-length sequence of edges connecting two nodes in a network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Path Weight</strong>: The sum of edge weights along a path, representing cumulative interaction strength or confidence.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Path Length Normalisation</strong>: Dividing total path weight by the number of edges in the path to allow fair comparison between paths of different lengths.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Protein–Protein Interaction (PPI) Network</strong>: A biological network where nodes represent proteins and edges represent physical or functional interactions.
+                </div>
+                <div class="glossary-entry">
+                    <strong>STRING Database</strong>: A curated database of known and predicted protein–protein interactions, commonly used to construct PPI networks.
+                </div>
+                <div class="glossary-entry">
+                    <strong>PageRank Score</strong>: A probabilistic measure of node importance based on network connectivity structure.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Network Perturbation</strong>: The modification of a network (e.g. removing a node) to study its structural or functional impact.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Connectivity</strong>: A property describing whether nodes in a network are reachable from one another.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Weighted Network</strong>: A network in which edges carry numerical values representing strength, confidence or magnitude of interaction.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div>© Built with parchmentIQ copyright of scryptIQ</div>
+            <div>© L2D is copyright UCL 2025</div>
+        </div>
+    </div>
+</body>
+</html>
+        
