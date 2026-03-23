@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- MathJax for mathematical notation -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            processEscapes: true
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
+    <!-- Syntax Highlighting with highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+    <link rel="stylesheet" href="../assets/static_output.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - NW3 - Connectome Analysis & Network Features</title>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/scryptIQ_logo_dark.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./elegans-graphs.html">Network Analysis of Neurons</a></li><li><a href="./locomotion-circuit.html">Locomotion Circuit</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-3">
+                    Connectome Analysis & Network Features
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-3"><li><a href="#introduction">Introduction</a></li><li><a href="#comparing-locomotion-circuits">Comparing locomotion circuits</a></li><li><a href="#edge-changes-between-networks">Edge changes between networks</a></li><li><a href="#edge-changes-between-networks-with-different-nodes">Edge changes between networks with different nodes</a></li><li><a href="#calculating-key-nodes">Calculating key nodes</a></li><li><a href="#network-derived-properties-for-machine-learning">Network-derived properties for machine learning</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3 class="collapsible-header collapsed">
+            Previous Modules
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+            <li><a href="../NW1/introduction.html">NW1</a></li>
+            <li><a href="../NW2/introduction.html">NW2</a></li>
+        </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Networks 3</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://scryptiq.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    scryptIQ
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Connectome Analysis & Network Features <span class="module-tag">NW3</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Apply network analysis techniques to biological connectome data.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Interpret node-level metrics such as degree, closeness centrality, and personalised PageRank.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">Compare network properties between developmental stages of a neural circuit.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">4</span>
+                    <span class="outcome-text">Understand how structural changes in a network influence information flow and neuronal importance.</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">5</span>
+                    <span class="outcome-text">Construct summary datasets of network features that can be used for downstream machine learning analyses.</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>Biological neural systems can be understood not only by examining individual neurons but also by analysing the structure of the networks they form. This section of the Networks 3 lesson extends our connectome analysis of <em>C. elegans</em> locomotion circuits, comparing the L1 larval and young adult (YA) connectomes through exploring how neuronal connectivity <em>reorganises</em> during development.<br><br>Using the covered measures such as <strong>centrality</strong>, <strong>Personalised PageRank</strong>, and <strong>shortest paths</strong>, we identify neurons that become more or less influential as the locomotion circuit matures. We will then summarise these network-derived properties into structured datasets that can be used for further computational analysis and machine learning applications.<br><br>Let&#x27;s begin by importing packages and reading in our adjacency matrices.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-36">import pandas as pd
+import numpy as np 
+import networkx as nx
+
+L1_am = pd.read_csv(&quot;data/L1_adjacency.csv&quot;, index_col = 0)
+L1_connectome =  nx.from_pandas_adjacency(L1_am, 
+                                          create_using = nx.DiGraph())
+YA_am = pd.read_csv(&quot;data/YA_adjacency.csv&quot;, index_col = 0)
+YA_connectome =  nx.from_pandas_adjacency(YA_am, 
+                                          create_using = nx.DiGraph())</code></pre>
+            </div>
+            
+        </div>
+        
+                </div>
+            </div>
+            
+            <div class="module-card" id="comparing-locomotion-circuits">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Comparing locomotion circuits</h3>
+                        <p>Although specific nodes of interest can be compared between the L1 and YA networks, comprehensively identifying all node‑level or edge‑level changes can be difficult to achieve through visual inspection or manual code exploration, alone. Let&#x27;s begin by looking at changes in nodes between the two networks.<br><br>Specifically, from examples given earlier in the lesson, you might already have noticed that the numbers of nodes and edges differ between the L1 and YA connectomes. Let&#x27;s inspect:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-37">print(&quot;L1_connectome has&quot;, len(L1_connectome.nodes()), &quot;nodes.&quot;)
+
+print(&quot;YA_connectome has &quot;, len(YA_connectome.nodes()), &quot;nodes.&quot;)</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">L1_connectome has 200 nodes.
+YA_connectome has  216 nodes.
+</pre></div>
+        </div>
+        <p>Earlier practice also showed that node names are found using the following function:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-38">L1_nodes = list(L1_connectome.nodes())
+YA_nodes = list(YA_connectome.nodes())
+
+print(&quot;L1 nodes:&quot;, list(L1_nodes)[:10])
+print(&quot;YA nodes:&quot;, list(YA_nodes)[:10])
+
+# Note, the list class is just to truncate the output so it doesn&#x27;t fill the page.</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">L1 nodes: [&#x27;IL1L&#x27;, &#x27;BWM-DR06&#x27;, &#x27;IL2VR&#x27;, &#x27;IL2VL&#x27;, &#x27;BWM-VL05&#x27;, &#x27;CEPVR&#x27;, &#x27;CEPVL&#x27;, &#x27;OLQVL&#x27;, &#x27;BWM-VL06&#x27;, &#x27;SAADR&#x27;]
+YA nodes: [&#x27;RIMR&#x27;, &#x27;RIVL&#x27;, &#x27;BWM-DR01&#x27;, &#x27;AIML&#x27;, &#x27;IL1R&#x27;, &#x27;ASJR&#x27;, &#x27;RID&#x27;, &#x27;BWM-DL03&#x27;, &#x27;PVCR&#x27;, &#x27;AINL&#x27;]
+</pre></div>
+        </div>
+        
+        <div class="info-box note-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                NOTE
+            </div>
+            <div class="box-content">
+                <p>We will need to wrap the node view into a data object such as a <strong>set</strong>, so that Python can read it as a conventional data object.<br><br>By converting the node views to sets, we can easily identify nodes that differ between the two connectomes using a <strong>set subtraction</strong> operation, as follows.</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-39">YA_L1_nodes = set(YA_nodes) - set(L1_nodes)
+
+print(&quot;These nodes are missing from the YA connectome: &quot;,YA_L1_nodes)
+print(&quot;This comes to&quot;, len(YA_L1_nodes), &quot;nodes.&quot;)</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">These nodes are missing from the YA connectome:  {&#x27;RMHL&#x27;, &#x27;AVFL&#x27;, &#x27;PVNR&#x27;, &#x27;RMFR&#x27;, &#x27;ALNL&#x27;, &#x27;ALNR&#x27;, &#x27;PLNR&#x27;, &#x27;SDQL&#x27;, &#x27;AVM&#x27;, &#x27;RMFL&#x27;, &#x27;AQR&#x27;, &#x27;BWM-DL07&#x27;, &#x27;AVFR&#x27;, &#x27;PLNL&#x27;, &#x27;unknownFLPR&#x27;, &#x27;PVNL&#x27;, &#x27;SABVL&#x27;, &#x27;CANL&#x27;, &#x27;HSNL&#x27;, &#x27;SDQR&#x27;, &#x27;HSNR&#x27;, &#x27;RMHR&#x27;}
+This comes to 22 nodes.
+</pre></div>
+        </div>
+        <p>In NetworkX, we can also call the <code>set()</code> function directly on the network created. NetworkX will then iterate over the entire network to yield its nodes.<br><br>It is therefore also possible (and much quicker) to do the following.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-40">YA_L1_nodes_n = set(YA_connectome) - set(L1_connectome)
+
+print(&quot;This returns the same output: &quot;,YA_L1_nodes_n)
+print(&quot;This comes to&quot;, len(YA_L1_nodes), &quot;nodes.&quot;)</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">This returns the same output:  {&#x27;RMHL&#x27;, &#x27;AVFL&#x27;, &#x27;PVNR&#x27;, &#x27;RMFR&#x27;, &#x27;ALNL&#x27;, &#x27;ALNR&#x27;, &#x27;PLNR&#x27;, &#x27;SDQL&#x27;, &#x27;AVM&#x27;, &#x27;RMFL&#x27;, &#x27;AQR&#x27;, &#x27;BWM-DL07&#x27;, &#x27;AVFR&#x27;, &#x27;PLNL&#x27;, &#x27;unknownFLPR&#x27;, &#x27;PVNL&#x27;, &#x27;SABVL&#x27;, &#x27;CANL&#x27;, &#x27;HSNL&#x27;, &#x27;SDQR&#x27;, &#x27;HSNR&#x27;, &#x27;RMHR&#x27;}
+This comes to 22 nodes.
+</pre></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="comparing-locomotion-circuits">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p><ul class="nested-list"><li>Repeat the node comparison analysis comparing L1 connectome minus YA connectome.</li><br><li>Does it return the same results?</li></ul></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-41"># Don&#x27;t forget, you can also download this lesson as a Jupyter Notebook from the &#x27;Resources&#x27; section in the sidebar.
+
+</code></pre>
+            </div>
+            
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="edge-changes-between-networks">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Edge changes between networks</h3>
+                        <p>In NetworkX, if two graphs contain the <em>same nodes</em>, we can directly compare their edge structure. This can be done using the <code>nx.difference()</code> function, which returns a new graph containing only the edges that are present in one graph but not the other. We can then inspect these edges using the <code>.edges</code> attribute, chaining this onto the function.<br><br>Let&#x27;s try this with the L1 and YA connectomes, creating new networks with identical nodes, and inspecting and identifying changes in edges.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-42"># First, let&#x27;s create a set of nodes shared between L1 and YA connectomes
+shared_nodes = set(L1_connectome) &amp; set(YA_connectome)
+
+# Create new subgraphs based on the shared node set:
+New_L1_connectome = L1_connectome.subgraph(shared_nodes)
+New_YA_connectome = YA_connectome.subgraph(shared_nodes)
+
+# Check if the nodes are the same between the two connectomes
+print(&quot;Are nodes identical between connectomes? :&quot;, set(New_L1_connectome) == set(New_YA_connectome), &quot;\n&quot;)
+
+# Then we can peform the edge difference calculation
+diff_edges = nx.difference(New_L1_connectome, New_YA_connectome).edges
+
+# And printing the number and names of differential edges
+print(&quot;These edges are different between the networks:&quot;, list(diff_edges)[:10], &quot;\n&quot;) # The list truncates the output from filling the screen.
+print(&quot;The number of differential edges:&quot;, len(diff_edges))</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">Are nodes identical between connectomes? : True 
+
+These edges are different between the networks: [(&#x27;IL1L&#x27;, &#x27;RIR&#x27;), (&#x27;IL1L&#x27;, &#x27;SIAVL&#x27;), (&#x27;IL1L&#x27;, &#x27;AFDL&#x27;), (&#x27;IL1L&#x27;, &#x27;SMDDR&#x27;), (&#x27;IL1L&#x27;, &#x27;SIBVL&#x27;), (&#x27;IL1L&#x27;, &#x27;AWCR&#x27;), (&#x27;IL1L&#x27;, &#x27;AIBL&#x27;), (&#x27;IL1L&#x27;, &#x27;AUAL&#x27;), (&#x27;IL1L&#x27;, &#x27;ASER&#x27;), (&#x27;IL1L&#x27;, &#x27;AVJL&#x27;)] 
+
+The number of differential edges: 1848
+</pre></div>
+        </div>
+        
+        <div class="info-box warning-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                WARNING
+            </div>
+            <div class="box-content">
+                <p>Note that we need to extract the edge set from the <code>nx.difference()</code> as the function creates a <em>new</em> graph with the same type as the first graph in the equation.</p>
+            </div>
+        </div>
+        <p>Similarly, we can also extract the identical edges between the two graphs using the <code>nx.intersection()</code> function and the <code>.edges</code> attribute, as follows.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-43"># Calculate the edges identical between the two connectomes
+identical_edges = nx.intersection(New_L1_connectome, New_YA_connectome).edges
+
+# print(&quot;These edges are identical between the networks:&quot;, identical_edges, &quot;\n&quot;) # Uncomment to see the full edge list.
+
+# And printing the number of identical edges
+print(&quot;The number of identical edges:&quot;, len(identical_edges), &quot;\n&quot;)</code></pre>
+            </div>
+            
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="edge-changes-between-networks-with-different-nodes">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Edge changes between networks with different nodes</h3>
+                        <p>Whilst the <code>nx.difference()</code> function provides brief insight into the edge rewiring between the two networks (with identical nodes), the function itself <em>cannot</em> be utilised for comparing networks with different node sets.<br><br>Importantly, <code>nx.difference()</code> also does not capture changes in node weights. Thus, a proper comparison of edges requires iteration across <em>both</em> networks. And we&#x27;ve already learnt how to do so from earlier materials.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-44"># First, we extract edges from each connectome
+edges_L1 = set(L1_connectome.edges())
+edges_YA = set(YA_connectome.edges())
+
+# Then, we calculate all edges possible between the two networks (this include L1 or YA specific edges or shared edges)
+all_edges = edges_L1 | edges_YA</code></pre>
+            </div>
+            
+        </div>
+        <p>In <strong>NetworkX</strong>, the weight of a specific edge can be accessed with the following expression:<br><br>$$
+w = G[u][v][\text{``weight''}]
+$$<br><br>Where:<br><ul class="nested-list"><li>$G$ is the graph</li><br><li>$u$ is the start node</li><br><li>$v$ is the target node</li><br><li>$w$ is the edge weight</li></ul></p><p>Using this notation, we can iterate through all edges in a <code>for</code> loop and extract the corresponding weights (if present) from each network.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-45"># Firstly, create an empty dictionary too capture the edges
+diff_edges = {}
+
+# Secondly, loop through all the edges between L1 and YA connectomes
+for u, v in all_edges:
+
+    # Create a conditional statement, if edge is presented (and same direction), extract the weight.
+    if (u, v) in edges_L1:
+        w_L1 = L1_connectome[u][v][&quot;weight&quot;]
+    # if not, assign weight as 0
+    else:
+        w_L1 = 0
+
+    # Repeat for YA connectome
+    if (u, v) in edges_YA:
+        w_YA = YA_connectome[u][v][&quot;weight&quot;]
+    else:
+        w_YA = 0
+
+    # Calculate the changes from L1 to YA
+    differences = w_YA - w_L1
+
+    # Store this difference to the dictionary with tuple as index
+    diff_edges[(u, v)] = differences</code></pre>
+            </div>
+            
+        </div>
+        <p>Conceptually, this for loop calculates the matrix for: $$∆ W$$<br><br>This matrix can then be converted into a NetworkX graph. To do so, we can iterate through the dictionary and add these edges (with weight) to a directed graph: the delta network (or rewiring graph):</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-46"># Firstly, create an empty directed graph
+Delta = nx.DiGraph()
+
+# Secondly, iterate through the different edges dictionary and add the weights into the DiGraph
+for (u, v), delta in diff_edges.items():
+    Delta.add_edge(u, v, weight=delta)
+</code></pre>
+            </div>
+            
+        </div>
+        <p>And a summary of the differential edges in the delta network:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-47">pos_edges = []
+neg_edges = []
+
+for u, v, d in Delta.edges(data=True):
+    if d[&quot;weight&quot;] &gt; 0:
+        pos_edges.append((u, v, d[&quot;weight&quot;]))
+    elif d[&quot;weight&quot;] &lt; 0:
+        neg_edges.append((u, v, d[&quot;weight&quot;]))
+
+print(&quot;Number of edges with increased weight:&quot;, len(pos_edges), &quot;\n&quot;)
+print(&quot;Number of edges with decreased weight:&quot;, len(neg_edges), &quot;\n&quot;)</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">Number of edges with increased weight: 11756 
+
+Number of edges with decreased weight: 2859 
+
+</pre></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="edge-changes-between-networks-with-different-nodes">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>2.</strong></p>
+                <p><ul class="nested-list"><li>Using the same codes as above, check whether there are edges that remain unchanged in the delta network:</li></ul></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-48"># To keep this page running smoothly, we have opted to remove interactivity from these cells on the live web page.
+# To do these practice exercises, we recommend that you download this lesson as a Jupyter Notebook from &#x27;Resources&#x27; on the left sidebar.
+
+</code></pre>
+            </div>
+            
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="calculating-key-nodes">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Calculating key nodes</h3>
+                        <p>Similarly to what we performed in the Breast Cancer Network, L1 and YA networks, it is possible to run <strong>centrality</strong> and <strong>Personalised PageRank</strong> to calculate the nodes most central to these changes. But firstly, let&#x27;s run the code similar to what you should have achieved in attempting the previous practice exercise.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-49">unchanged_edges = []
+
+for u, v, d in Delta.edges(data=True):
+    if d[&quot;weight&quot;] == 0:
+        unchanged_edges.append((u, v, d[&quot;weight&quot;]))
+
+print(&quot;Number of edges with unchanged weight:&quot;, len(unchanged_edges))</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">Number of edges with unchanged weight: 4
+</pre></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-50">delta_degree = nx.degree_centrality(Delta)
+delta_df = pd.DataFrame.from_dict(delta_degree, orient = &quot;index&quot;)
+
+print(delta_df.sort_values([0],ascending = False))</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">                  0
+SIBVL      1.140271
+RICL       1.140271
+SIBVR      1.140271
+DVA        1.067873
+AIBL       1.058824
+...             ...
+Fragment1  0.072398
+Fragment2  0.072398
+CANL       0.045249
+SABVL      0.045249
+CANR       0.027149
+
+[222 rows x 1 columns]
+</pre></div>
+        </div>
+        <p><em>RICL</em> stands out as a rewiring hub because it is not only highly connected, but is strategically positioned at the intersection of sensory processing, neuromodulation and motor control. As a neuromodulatory integrator, RICL receives convergent input from diverse sensory and mechanosensory neurons and distributes modulatory output to multiple head motor circuits.<br><br>This places it in a privileged position to coordinate early sensorimotor transformations. Between the L1 and YA stages, these pathways undergo substantial refinement, and <em>RICL’s</em> connectivity shifts accordingly. Its high degree centrality in the delta network reflects the fact that many of these developmental changes converge on or radiate from RICL, marking it as one of the principal nodes through which the maturing connectome reorganises its information flow.</p><p>Similarly, <em>SIBVR</em> (right ventral SIB) and <em>SIBVL</em> (left ventral SIB) emerge as prominently connected nodes because of their foundational role in establishing the early head motor circuit. These neurons are generated very early in embryogenesis and help lay down the initial structural scaffold of the head network, providing stable reference points onto which later‑born neurons anchor their developing processes. As the connectome transitions from the simpler L1 architecture to the more refined YA configuration, the circuits surrounding <em>SIBVL</em> and <em>SIBVR</em> undergo substantial remodelling. Their early, highly connected position means they absorb a disproportionate share of synaptic additions, eliminations, and weight adjustments. This developmental centrality is reflected in their high degree centrality within the delta network, marking them as key loci through which the maturing head motor system reorganises its connectivity.</p><p>Whilst we can extend this analysis to closeness centrality, one caveat of NetworkX is that closeness centrality analysis does not take negative values. This is because closeness centrality depends on shortest paths, and shortest paths with negative weights are invalid. To calculate closeness, we therefore need to convert the negative weights to positive weights.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-51">AbsDelta = nx.DiGraph()
+for u, v, d in Delta.edges(data=True):
+    AbsDelta.add_edge(u, v, weight=abs(d[&quot;weight&quot;]))</code></pre>
+            </div>
+            
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-52">delta_closeness = nx.closeness_centrality(AbsDelta)
+delta_closeness_df = pd.DataFrame.from_dict(delta_closeness, orient = &quot;index&quot;)
+
+print(delta_closeness_df.sort_values([0],ascending = False))</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">                  0
+RICL       0.699367
+SIBVL      0.699367
+SIBVR      0.697161
+DVA        0.682099
+AIBL       0.680000
+...             ...
+Fragment2  0.479393
+Fragment1  0.471215
+SABVL      0.464286
+CANR       0.433333
+CANL       0.429126
+
+[222 rows x 1 columns]
+</pre></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="calculating-key-nodes">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>3.</strong></p>
+                <p><ul class="nested-list"><li>Instead of running the absolute delta network, split the delta network into positive and negative edges (don&#x27;t forget to calculate absolute weights for negative edge deltas).</li><br><li>Do RICL, SIBVR, and SIBVL remain among the top closeness nodes in each network?</li></ul></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-53"># To keep this page running smoothly, we have opted to remove interactivity from these cells on the live web page.
+# To do these practice exercises, we recommend that you download this lesson as a Jupyter Notebook from &#x27;Resources&#x27; on the left sidebar.
+
+</code></pre>
+            </div>
+            
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-54"># COLLAPSABLE WITH NO OUTPUT
+
+neg_delta = nx.DiGraph()
+pos_delta = nx.DiGraph()
+for u, v, d in Delta.edges(data=True):
+    if d[&quot;weight&quot;] &lt; 0:
+        neg_delta.add_edge(u, v, weight=abs(d[&quot;weight&quot;]))
+    elif d[&quot;weight&quot;] &gt; 0:
+        pos_delta.add_edge(u, v, weight=abs(d[&quot;weight&quot;]))</code></pre>
+            </div>
+            
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-55">pos_closeness = nx.closeness_centrality(pos_delta)
+pos_closeness_df = pd.DataFrame.from_dict(pos_closeness, orient = &quot;index&quot;)
+
+print(pos_closeness_df.sort_values([0],ascending = False))</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">                 0
+AVAR      0.653495
+SIBVR     0.653495
+AVBR      0.645646
+RMFR      0.645646
+SIBDR     0.643713
+...            ...
+BWM-DR07  0.489749
+BWM-DL02  0.480984
+SABVL     0.452632
+CANL      0.415861
+CANR      0.365646
+
+[216 rows x 1 columns]
+</pre></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-56">neg_closeness = nx.closeness_centrality(neg_delta)
+neg_closeness_df = pd.DataFrame.from_dict(neg_closeness, orient = &quot;index&quot;)
+print(neg_closeness_df.sort_values([0],ascending = False))</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">                 0
+excgl     0.545205
+RIR       0.529255
+DVA       0.515544
+ADAR      0.515544
+AIBL      0.512887
+...            ...
+BWM-DR08  0.322528
+CANR      0.322006
+BWM-VL04  0.317891
+BWM-DL04  0.317891
+BWM-DR06  0.313386
+
+[200 rows x 1 columns]
+</pre></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="network-derived-properties-for-machine-learning">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Network-derived properties for machine learning</h3>
+                        
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p><ul class="nested-list"><li><strong>Machine learning (ML)</strong> is the field of data analysis in which algorithms learn patterns from data in order to make predictions, classifications, or discover structure without being explicitly programmed. While this has not been covered so far in the course, for those signed up for it, there is an entire module of the scryptIQ course dedicated to its exploration.</li><br><li><strong>Clustering</strong> is an unsupervised machine-learning method that groups observations according to similarity in their features, allowing natural structure in the data to emerge. We mention it</li></ul></p>
+            </div>
+        </div>
+        <h4>From network analysis to machine learning</h4><p>Taken together with the node centrality calculations introduced earlier in this lesson, we can summarise the structural properties of each neuron in a single Pandas DataFrame.<br><br>Machine learning (ML) methods typically require data to be organised as a structured table of numerical features. Network-derived properties provide a natural bridge between graph analysis and machine learning because they convert each neuron from a position in a network into a set of quantitative descriptors.<br><br>Measures such as in-degree, out-degree, centrality, and delta-based rewiring scores capture different aspects of how each neuron participates in the connectome and how its connectivity changes between the L1 and YA developmental stages.</p><h4>Preparing the data for clustering</h4><p>By combining these network-derived properties into a <strong>feature matrix</strong>—where each row represents a neuron and each column represents a network-derived measurement—we create a dataset suitable for machine-learning analysis.<br><br>One useful application is <strong>clustering</strong>, which groups neurons according to similarity in their connectivity features. This can help reveal sets of neurons that share similar structural roles or patterns of developmental rewiring within the connectome.<br><br>The code cells below prepare the data for these analyses by calculating multiple network-derived measures, aligning them across networks, and merging them into a single DataFrame. The final result is a clean, model-ready dataset in which each neuron is represented by a comparable set of biologically meaningful features.<br><br>The cell below, for instance:<br><ul class="nested-list"><li>Calculates the <strong>in-degree</strong> and <strong>out-degree</strong> for every neuron in both the <strong>L1</strong> and <strong>YA</strong> connectome networks</li><br><li>Converts the results into <strong>Pandas DataFrames</strong> so the degree values can be easily compared</li><br><li><strong>Merges</strong> the L1 and YA results by neuron name, ensuring that <strong>all neurons from both networks</strong> are included</li><br><li>Computes the <strong>difference in degree</strong> between developmental stages (L1 − YA) for each neuron</li><br><li><strong>Sorts the neurons by the absolute magnitude of the difference</strong>, highlighting those with the largest connectivity change</li></ul></p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-57"># This code would have been executed in earlier part of the exercise:
+L1_indegree = L1_connectome.in_degree()
+L1_indegree_df = pd.DataFrame(list(dict(L1_indegree).items()), 
+                              columns=[&#x27;Node&#x27;, &#x27;In-Degree&#x27;])
+YA_indegree = YA_connectome.in_degree()
+YA_indegree_df = pd.DataFrame(list(dict(YA_indegree).items()), 
+                              columns=[&#x27;Node&#x27;, &#x27;In-Degree&#x27;])
+Indegree_df = pd.merge(L1_indegree_df, 
+                     YA_indegree_df, 
+                     on=&#x27;Node&#x27;, ## joining by node name
+                     how=&#x27;outer&#x27;) ## Take all possible nodes
+Indegree_df.columns = [&quot;Node&quot;,&quot;L1&quot;,&quot;YA&quot;]
+Indegree_df[&quot;Differences&quot;] = Indegree_df[&quot;L1&quot;] - Indegree_df[&quot;YA&quot;]
+Indegree_df = Indegree_df.reindex(Indegree_df[&#x27;Differences&#x27;].abs().sort_values(ascending=False).index)
+
+
+L1_outdegree = L1_connectome.out_degree()
+L1_outdegree_df = pd.DataFrame(list(dict(L1_outdegree).items()), 
+                              columns=[&#x27;Node&#x27;, &#x27;Out-Degree&#x27;])
+YA_outdegree = YA_connectome.out_degree()
+YA_outdegree_df = pd.DataFrame(list(dict(YA_outdegree).items()), 
+                              columns=[&#x27;Node&#x27;, &#x27;Out-Degree&#x27;])
+Outdegree_df = pd.merge(L1_outdegree_df, 
+                     YA_outdegree_df, 
+                     on=&#x27;Node&#x27;, ## joining by node name
+                     how=&#x27;outer&#x27;) ## Take all possible nodes
+Outdegree_df.columns = [&quot;Node&quot;,&quot;L1&quot;,&quot;YA&quot;]
+Outdegree_df[&quot;Differences&quot;] = Outdegree_df[&quot;L1&quot;] - Outdegree_df[&quot;YA&quot;]
+Outdegree_df = Outdegree_df.reindex(Outdegree_df[&#x27;Differences&#x27;].abs().sort_values(ascending=False).index)
+</code></pre>
+            </div>
+            
+        </div>
+        <p>We can then merge these DataFrames together.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-58">## Rename columns
+Outdegree_df.columns = [&quot;Node&quot;,&quot;L1_outdgree&quot;,&quot;YA_outdegree&quot;,&quot;Outdegree_difference&quot;]
+Indegree_df.columns = [&quot;Node&quot;,&quot;L1_indegree&quot;,&quot;YA_indgree&quot;,&quot;Indegree_difference&quot;]
+
+delta_df.columns = [&quot;Delta_degree&quot;]
+
+neg_closeness_df.columns = [&quot;Negative_closeness&quot;]
+pos_closeness_df.columns = [&quot;Positive_closeness&quot;]
+
+delta_closeness_df.columns = [&quot;Delta_closeness&quot;]</code></pre>
+            </div>
+            
+        </div>
+        <p>We can then append all DataFrames together, starting from <code>delta_df</code> (as it contains all nodes).</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-59">node_properties = delta_df.merge(Indegree_df,
+                                 how = &quot;left&quot;, # appending so all values in left dataframe is kept
+                                 right_on = &quot;Node&quot;,
+                                 left_index = True)</code></pre>
+            </div>
+            
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-60">node_properties = node_properties.merge(Outdegree_df,
+                                    how = &quot;left&quot;, # appending so all values in left dataframe is kept
+                                    right_on = &quot;Node&quot;,
+                                    left_on = &quot;Node&quot;)</code></pre>
+            </div>
+            
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-61"># Merge on index for neg, closeeness dataframes
+node_properties = node_properties.merge(neg_closeness_df, how = &quot;left&quot;, left_on = &quot;Node&quot;,
+                                        right_index = True)</code></pre>
+            </div>
+            
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-62">node_properties = node_properties.merge(pos_closeness_df, how = &quot;left&quot;, left_on = &quot;Node&quot;,
+                                        right_index = True)</code></pre>
+            </div>
+            
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-63">node_properties = node_properties.merge(delta_closeness_df, how = &quot;left&quot;, left_on = &quot;Node&quot;,
+                                        right_index = True)</code></pre>
+            </div>
+            
+        </div>
+        <p>Lastly, let&#x27;s display the final DataFrame summarising the network-derived features calculated throughout this section.<br><br>In summary constructing this DataFrame involved computing several structural measures for each neuron in both the <strong>L1</strong> and <strong>YA</strong> connectomes, including <strong>in-degree</strong>, <strong>out-degree</strong>, and other centrality-based metrics. We then <em>aligned</em> the results by neuron name so that the same neurons could be directly compared between the two developmental stages. For each measure, the values from the L1 and YA networks were merged into a single table and a <strong>difference score</strong> was calculated to quantify how each neuron’s connectivity changed during development.<br><br>The final DataFrame therefore represents a <strong>feature matrix</strong> in which each row corresponds to a neuron and each column contains a network-derived property or developmental change. This structured representation makes it possible to compare neurons systematically and prepares the connectome data for downstream analyses such as clustering or other machine-learning methods.</p>
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p>A <strong>feature matrix</strong> is a structured table in which rows represent observations and columns represent numerical features describing these observations, providing the standard input format used by machine-learning algorithms.</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-64">print(node_properties)</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">     Delta_degree       Node  L1_indegree  YA_indgree  Indegree_difference  \
+0        0.751131       AVFR          NaN        83.0                  NaN   
+1        0.941176       RIMR         68.0        95.0                -27.0   
+2        1.058824       AIBL         97.0        97.0                  0.0   
+3        0.760181      URYDL         75.0        67.0                  8.0   
+4        0.443439       ALML         28.0        43.0                -15.0   
+..            ...        ...          ...         ...                  ...   
+217      0.171946   BWM-DR08          6.0        18.0                -12.0   
+218      0.045249       CANL          NaN         5.0                  NaN   
+219      0.027149       CANR          3.0         2.0                  1.0   
+220      0.072398  Fragment2          8.0         NaN                  NaN   
+221      0.045249      SABVL          NaN         5.0                  NaN   
+
+     L1_outdgree  YA_outdegree  Outdegree_difference  Negative_closeness  \
+0            NaN          83.0                   NaN                 NaN   
+1           68.0          95.0                 -27.0            0.451247   
+2           97.0          97.0                   0.0            0.512887   
+3           75.0          67.0                   8.0            0.484185   
+4           28.0          43.0                 -15.0            0.408624   
+..           ...           ...                   ...                 ...   
+217          6.0          18.0                 -12.0            0.322528   
+218          NaN           5.0                   NaN                 NaN   
+219          3.0           2.0                   1.0            0.322006   
+220          8.0           NaN                   NaN            0.406122   
+221          NaN           5.0                   NaN                 NaN   
+
+     Positive_closeness  Delta_closeness  
+0              0.619597         0.615599  
+1              0.626822         0.653846  
+2              0.626822         0.680000  
+3              0.579515         0.615599  
+4              0.549872         0.562341  
+..                  ...              ...  
+217            0.515588         0.515152  
+218            0.415861         0.429126  
+219            0.365646         0.433333  
+220                 NaN         0.479393  
+221            0.452632         0.464286  
+
+[222 rows x 11 columns]
+</pre></div>
+        </div>
+        <p>And for ease, let&#x27;s assign the node to be the index, rather than Pandas&#x27; inherent numerical, zero-based indices.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <pre><code class="language-python" id="code-65">node_properties = node_properties.set_index(&quot;Node&quot;)
+
+print(node_properties)</code></pre>
+            </div>
+            <div class="output-container"><pre class="output-stream">           Delta_degree  L1_indegree  YA_indgree  Indegree_difference  \
+Node                                                                    
+AVFR           0.751131          NaN        83.0                  NaN   
+RIMR           0.941176         68.0        95.0                -27.0   
+AIBL           1.058824         97.0        97.0                  0.0   
+URYDL          0.760181         75.0        67.0                  8.0   
+ALML           0.443439         28.0        43.0                -15.0   
+...                 ...          ...         ...                  ...   
+BWM-DR08       0.171946          6.0        18.0                -12.0   
+CANL           0.045249          NaN         5.0                  NaN   
+CANR           0.027149          3.0         2.0                  1.0   
+Fragment2      0.072398          8.0         NaN                  NaN   
+SABVL          0.045249          NaN         5.0                  NaN   
+
+           L1_outdgree  YA_outdegree  Outdegree_difference  \
+Node                                                         
+AVFR               NaN          83.0                   NaN   
+RIMR              68.0          95.0                 -27.0   
+AIBL              97.0          97.0                   0.0   
+URYDL             75.0          67.0                   8.0   
+ALML              28.0          43.0                 -15.0   
+...                ...           ...                   ...   
+BWM-DR08           6.0          18.0                 -12.0   
+CANL               NaN           5.0                   NaN   
+CANR               3.0           2.0                   1.0   
+Fragment2          8.0           NaN                   NaN   
+SABVL              NaN           5.0                   NaN   
+
+           Negative_closeness  Positive_closeness  Delta_closeness  
+Node                                                                
+AVFR                      NaN            0.619597         0.615599  
+RIMR                 0.451247            0.626822         0.653846  
+AIBL                 0.512887            0.626822         0.680000  
+URYDL                0.484185            0.579515         0.615599  
+ALML                 0.408624            0.549872         0.562341  
+...                       ...                 ...              ...  
+BWM-DR08             0.322528            0.515588         0.515152  
+CANL                      NaN            0.415861         0.429126  
+CANR                 0.322006            0.365646         0.433333  
+Fragment2            0.406122                 NaN         0.479393  
+SABVL                     NaN            0.452632         0.464286  
+
+[222 rows x 10 columns]
+</pre></div>
+        </div>
+        <p>Here, we have created a new DataFrame of node properties that summarises the changes in node centrality between the L1 and YA connectomes. These network‑derived properties provide a rich feature set that can be directly leveraged in later machine‑learning chapters of the course. Measures such as degree, closeness, PageRank, and others capture complementary aspects of each neuron’s structural role and developmental change, allowing us to represent the connectome in a quantitative, model‑ready form. By transforming each neuron into a vector of biologically meaningful features, we can train classifiers to distinguish developmental neuron types, predict which neurons are most likely to undergo rewiring, or identify structural motifs associated with functional specialisation. These features also enable unsupervised learning approaches, such as clustering or dimensionality reduction, to reveal latent organisational principles in the connectome.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>This notebook explores how <strong>network analysis can be used to study developmental changes in the <em>C. elegans</em> locomotion connectome</strong>. Using adjacency matrices for the <strong>L1 larval</strong> and <strong>young adult (YA)</strong> stages, we construct graph representations of each connectome and analyse their structure using metrics such as <strong>in-degree, out-degree, centrality measures, personalised PageRank, and shortest path analysis</strong>. These calculations help identify neurons that play important roles in the locomotion circuit and reveal how connectivity patterns change as the organism develops. We then compare the networks directly to detect <strong>edge-level rewiring and shifts in neuronal influence</strong>. Finally, the network-derived measurements are consolidated into a <strong>feature matrix</strong>, creating a structured dataset in which each neuron is described by multiple connectivity features. This representation allows the connectome data to be analysed using <strong>machine-learning approaches such as clustering</strong>, enabling the discovery of neurons with similar connectivity signatures or developmental rewiring patterns.</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./locomotion-circuit.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./assignment.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Static Notebook - Pre-executed Content</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Initialize syntax highlighting -->
+    <script>
+        // Set page ready flag immediately for PDF generation
+        window.pageReady = true;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+</html>
+    

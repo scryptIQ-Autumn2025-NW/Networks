@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - NW3 - Glossary</title>
+    
+    <style>
+        /* Override sidebar styling since we're not using it */
+        body {
+            background-color: var(--background) !important;
+            color: var(--text-primary);
+            margin: 0 !important;
+            padding: 0 !important;
+            min-height: 100vh;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            flex-direction: column !important;
+        }
+
+        .main-content {
+            width: 100% !important;
+            max-width: 1200px !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+            margin: 0 auto !important;
+            position: relative !important;
+            left: auto !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        /* Additional centering overrides */
+        #main-content {
+            margin-left: auto !important;
+            margin-right: auto !important;
+            text-align: left !important;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo-container img {
+            width: clamp(60px, 10vw, 120px);
+            height: clamp(60px, 10vw, 120px);
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glossary-entry {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .glossary-entry:last-child {
+            border-bottom: none;
+        }
+
+        .glossary-term {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--remember);
+            margin-bottom: 8px;
+        }
+
+        .glossary-definition {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .logo-container img {
+                height: 60px;
+            }
+            
+            .glossary-term {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-content" class="main-content">
+        <div class="top-navbar">
+            <div class="logo-container">
+                <h1 class="page-title">Networks 3 - Glossary</h1>
+            </div>
+        </div>
+
+        <div class="module-card">
+            <div class="module-header">
+                Glossary <span class="module-tag">NW3</span>
+            </div>
+            <div class="module-body">
+                
+                <div class="glossary-entry">
+                    <strong>Adjacency Matrix</strong>: A square matrix used to represent a network, where rows and columns correspond to nodes and each entry indicates whether a connection exists between them.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Directed Graph</strong>: A network in which edges have direction, meaning connections go from a source node to a target node.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Node (Vertex)</strong>: An individual unit within a network, such as a neuron in a connectome.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Edge</strong>: A connection between two nodes representing an interaction or relationship.
+                </div>
+                <div class="glossary-entry">
+                    <strong>In-Degree</strong>: The number of incoming connections to a node.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Out-Degree</strong>: The number of outgoing connections from a node.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Connectome</strong>: A complete map of neural connections within a nervous system.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Locomotion Circuit</strong>: A subset of neurons that coordinate forward and backward movement in *C. elegans*.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Shortest Path Analysis</strong>: A method used to determine the minimum number of steps or connections required to travel between two nodes in a network.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Personalised PageRank (PPR)</strong>: A variant of PageRank that measures node influence while biasing importance toward specified starting nodes.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Developmental Connectome Comparison</strong>: The analysis of how network structure changes between developmental stages (e.g. L1 larva and young adult).
+                </div>
+                <div class="glossary-entry">
+                    <strong>Rewiring (Network Rewiring)</strong>: Changes in connections between nodes across networks or developmental stages.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Feature Matrix</strong>: A structured table where rows represent observations (e.g. neurons) and columns contain numerical features describing them.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Network-Derived Features</strong>: Quantitative measurements calculated from network structure (such as degree or centrality) used for further analysis.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Clustering</strong>: An unsupervised machine-learning technique that groups nodes according to similarity in their features.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div>© Built with parchmentIQ copyright of scryptIQ</div>
+            <div>© L2D is copyright UCL 2025</div>
+        </div>
+    </div>
+</body>
+</html>
+        
