@@ -211,7 +211,7 @@ YA nodes: [&#x27;RIMR&#x27;, &#x27;RIVL&#x27;, &#x27;BWM-DR01&#x27;, &#x27;AIML&
 print(&quot;These nodes are missing from the YA connectome: &quot;,YA_L1_nodes)
 print(&quot;This comes to&quot;, len(YA_L1_nodes), &quot;nodes.&quot;)</code></pre>
             </div>
-            <div class="output-container"><pre class="output-stream">These nodes are missing from the YA connectome:  {&#x27;RMHL&#x27;, &#x27;AVFL&#x27;, &#x27;PVNR&#x27;, &#x27;RMFR&#x27;, &#x27;ALNL&#x27;, &#x27;ALNR&#x27;, &#x27;PLNR&#x27;, &#x27;SDQL&#x27;, &#x27;AVM&#x27;, &#x27;RMFL&#x27;, &#x27;AQR&#x27;, &#x27;BWM-DL07&#x27;, &#x27;AVFR&#x27;, &#x27;PLNL&#x27;, &#x27;unknownFLPR&#x27;, &#x27;PVNL&#x27;, &#x27;SABVL&#x27;, &#x27;CANL&#x27;, &#x27;HSNL&#x27;, &#x27;SDQR&#x27;, &#x27;HSNR&#x27;, &#x27;RMHR&#x27;}
+            <div class="output-container"><pre class="output-stream">These nodes are missing from the YA connectome:  {&#x27;SABVL&#x27;, &#x27;unknownFLPR&#x27;, &#x27;AVFL&#x27;, &#x27;ALNL&#x27;, &#x27;AVFR&#x27;, &#x27;PVNR&#x27;, &#x27;SDQR&#x27;, &#x27;RMHL&#x27;, &#x27;RMFL&#x27;, &#x27;CANL&#x27;, &#x27;RMHR&#x27;, &#x27;PLNR&#x27;, &#x27;PLNL&#x27;, &#x27;HSNL&#x27;, &#x27;RMFR&#x27;, &#x27;HSNR&#x27;, &#x27;PVNL&#x27;, &#x27;AQR&#x27;, &#x27;BWM-DL07&#x27;, &#x27;AVM&#x27;, &#x27;SDQL&#x27;, &#x27;ALNR&#x27;}
 This comes to 22 nodes.
 </pre></div>
         </div>
@@ -223,7 +223,7 @@ This comes to 22 nodes.
 print(&quot;This returns the same output: &quot;,YA_L1_nodes_n)
 print(&quot;This comes to&quot;, len(YA_L1_nodes), &quot;nodes.&quot;)</code></pre>
             </div>
-            <div class="output-container"><pre class="output-stream">This returns the same output:  {&#x27;RMHL&#x27;, &#x27;AVFL&#x27;, &#x27;PVNR&#x27;, &#x27;RMFR&#x27;, &#x27;ALNL&#x27;, &#x27;ALNR&#x27;, &#x27;PLNR&#x27;, &#x27;SDQL&#x27;, &#x27;AVM&#x27;, &#x27;RMFL&#x27;, &#x27;AQR&#x27;, &#x27;BWM-DL07&#x27;, &#x27;AVFR&#x27;, &#x27;PLNL&#x27;, &#x27;unknownFLPR&#x27;, &#x27;PVNL&#x27;, &#x27;SABVL&#x27;, &#x27;CANL&#x27;, &#x27;HSNL&#x27;, &#x27;SDQR&#x27;, &#x27;HSNR&#x27;, &#x27;RMHR&#x27;}
+            <div class="output-container"><pre class="output-stream">This returns the same output:  {&#x27;SABVL&#x27;, &#x27;unknownFLPR&#x27;, &#x27;AVFL&#x27;, &#x27;ALNL&#x27;, &#x27;AVFR&#x27;, &#x27;PVNR&#x27;, &#x27;SDQR&#x27;, &#x27;RMHL&#x27;, &#x27;RMFL&#x27;, &#x27;CANL&#x27;, &#x27;RMHR&#x27;, &#x27;PLNR&#x27;, &#x27;PLNL&#x27;, &#x27;HSNL&#x27;, &#x27;RMFR&#x27;, &#x27;HSNR&#x27;, &#x27;PVNL&#x27;, &#x27;AQR&#x27;, &#x27;BWM-DL07&#x27;, &#x27;AVM&#x27;, &#x27;SDQL&#x27;, &#x27;ALNR&#x27;}
 This comes to 22 nodes.
 </pre></div>
         </div>
@@ -335,9 +335,7 @@ all_edges = edges_L1 | edges_YA</code></pre>
             </div>
             
         </div>
-        <p>In <strong>NetworkX</strong>, the weight of a specific edge can be accessed with the following expression:<br><br>$$
-w = G[u][v][\text{``weight''}]
-$$<br><br>Where:<br><ul class="nested-list"><li>$G$ is the graph</li><br><li>$u$ is the start node</li><br><li>$v$ is the target node</li><br><li>$w$ is the edge weight</li></ul></p><p>Using this notation, we can iterate through all edges in a <code>for</code> loop and extract the corresponding weights (if present) from each network.</p>
+        <p>In <strong>NetworkX</strong>, the weight of a specific edge can be accessed with the following expression:<br><br>$$w = G[u][v][\text{``weight''}]$$</p><p>Where:<ul class="nested-list"><li>$G$ is the graph</li><br><li>$u$ is the start node</li><br><li>$v$ is the target node</li><br><li>$w$ is the edge weight</li></ul></p><p>Using this notation, we can iterate through all edges in a <code>for</code> loop and extract the corresponding weights (if present) from each network.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <pre><code class="language-python" id="code-45"># Firstly, create an empty dictionary too capture the edges
@@ -462,14 +460,14 @@ delta_df = pd.DataFrame.from_dict(delta_degree, orient = &quot;index&quot;)
 print(delta_df.sort_values([0],ascending = False))</code></pre>
             </div>
             <div class="output-container"><pre class="output-stream">                  0
-SIBVL      1.140271
 RICL       1.140271
+SIBVL      1.140271
 SIBVR      1.140271
 DVA        1.067873
 AIBL       1.058824
 ...             ...
-Fragment1  0.072398
 Fragment2  0.072398
+Fragment1  0.072398
 CANL       0.045249
 SABVL      0.045249
 CANR       0.027149
@@ -565,8 +563,8 @@ print(pos_closeness_df.sort_values([0],ascending = False))</code></pre>
             <div class="output-container"><pre class="output-stream">                 0
 AVAR      0.653495
 SIBVR     0.653495
-AVBR      0.645646
 RMFR      0.645646
+AVBR      0.645646
 SIBDR     0.643713
 ...            ...
 BWM-DR07  0.489749
@@ -732,44 +730,44 @@ node_properties = node_properties.merge(neg_closeness_df, how = &quot;left&quot;
             <div class="code-container code-fixed">
                 <pre><code class="language-python" id="code-64">print(node_properties)</code></pre>
             </div>
-            <div class="output-container"><pre class="output-stream">     Delta_degree       Node  L1_indegree  YA_indgree  Indegree_difference  \
-0        0.751131       AVFR          NaN        83.0                  NaN   
-1        0.941176       RIMR         68.0        95.0                -27.0   
-2        1.058824       AIBL         97.0        97.0                  0.0   
-3        0.760181      URYDL         75.0        67.0                  8.0   
-4        0.443439       ALML         28.0        43.0                -15.0   
-..            ...        ...          ...         ...                  ...   
-217      0.171946   BWM-DR08          6.0        18.0                -12.0   
-218      0.045249       CANL          NaN         5.0                  NaN   
-219      0.027149       CANR          3.0         2.0                  1.0   
-220      0.072398  Fragment2          8.0         NaN                  NaN   
-221      0.045249      SABVL          NaN         5.0                  NaN   
+            <div class="output-container"><pre class="output-stream">     Delta_degree      Node  L1_indegree  YA_indgree  Indegree_difference  \
+0        0.588235      IL1R         49.0        53.0                 -4.0   
+1        0.515837      ADLR         35.0        54.0                -19.0   
+2        0.841629      RMDL         69.0        84.0                -15.0   
+3        0.787330     SIAVL         57.0        73.0                -16.0   
+4        0.289593  BWM-VL04         14.0        31.0                -17.0   
+..            ...       ...          ...         ...                  ...   
+217      0.235294  BWM-DL06         19.0        19.0                  0.0   
+218      0.190045  BWM-VL07          4.0        19.0                -15.0   
+219      0.045249      CANL          NaN         5.0                  NaN   
+220      0.045249     SABVL          NaN         5.0                  NaN   
+221      0.027149      CANR          3.0         2.0                  1.0   
 
      L1_outdgree  YA_outdegree  Outdegree_difference  Negative_closeness  \
-0            NaN          83.0                   NaN                 NaN   
-1           68.0          95.0                 -27.0            0.451247   
-2           97.0          97.0                   0.0            0.512887   
-3           75.0          67.0                   8.0            0.484185   
-4           28.0          43.0                 -15.0            0.408624   
+0           49.0          53.0                  -4.0            0.460648   
+1           35.0          54.0                 -19.0            0.382692   
+2           69.0          84.0                 -15.0            0.446188   
+3           57.0          73.0                 -16.0            0.427039   
+4           14.0          31.0                 -17.0            0.317891   
 ..           ...           ...                   ...                 ...   
-217          6.0          18.0                 -12.0            0.322528   
-218          NaN           5.0                   NaN                 NaN   
-219          3.0           2.0                   1.0            0.322006   
-220          8.0           NaN                   NaN            0.406122   
-221          NaN           5.0                   NaN                 NaN   
+217         19.0          19.0                   0.0            0.396414   
+218          4.0          19.0                 -15.0            0.345486   
+219          NaN           5.0                   NaN                 NaN   
+220          NaN           5.0                   NaN                 NaN   
+221          3.0           2.0                   1.0            0.322006   
 
      Positive_closeness  Delta_closeness  
-0              0.619597         0.615599  
-1              0.626822         0.653846  
-2              0.626822         0.680000  
-3              0.579515         0.615599  
-4              0.549872         0.562341  
+0              0.558442         0.586207  
+1              0.544304         0.563776  
+2              0.607345         0.629630  
+3              0.598886         0.622535  
+4              0.532178         0.533816  
 ..                  ...              ...  
-217            0.515588         0.515152  
-218            0.415861         0.429126  
-219            0.365646         0.433333  
-220                 NaN         0.479393  
-221            0.452632         0.464286  
+217            0.515588         0.526190  
+218            0.508274         0.515152  
+219            0.415861         0.429126  
+220            0.452632         0.464286  
+221            0.365646         0.433333  
 
 [222 rows x 11 columns]
 </pre></div>
@@ -781,47 +779,47 @@ node_properties = node_properties.merge(neg_closeness_df, how = &quot;left&quot;
 
 print(node_properties)</code></pre>
             </div>
-            <div class="output-container"><pre class="output-stream">           Delta_degree  L1_indegree  YA_indgree  Indegree_difference  \
-Node                                                                    
-AVFR           0.751131          NaN        83.0                  NaN   
-RIMR           0.941176         68.0        95.0                -27.0   
-AIBL           1.058824         97.0        97.0                  0.0   
-URYDL          0.760181         75.0        67.0                  8.0   
-ALML           0.443439         28.0        43.0                -15.0   
-...                 ...          ...         ...                  ...   
-BWM-DR08       0.171946          6.0        18.0                -12.0   
-CANL           0.045249          NaN         5.0                  NaN   
-CANR           0.027149          3.0         2.0                  1.0   
-Fragment2      0.072398          8.0         NaN                  NaN   
-SABVL          0.045249          NaN         5.0                  NaN   
+            <div class="output-container"><pre class="output-stream">          Delta_degree  L1_indegree  YA_indgree  Indegree_difference  \
+Node                                                                   
+IL1R          0.588235         49.0        53.0                 -4.0   
+ADLR          0.515837         35.0        54.0                -19.0   
+RMDL          0.841629         69.0        84.0                -15.0   
+SIAVL         0.787330         57.0        73.0                -16.0   
+BWM-VL04      0.289593         14.0        31.0                -17.0   
+...                ...          ...         ...                  ...   
+BWM-DL06      0.235294         19.0        19.0                  0.0   
+BWM-VL07      0.190045          4.0        19.0                -15.0   
+CANL          0.045249          NaN         5.0                  NaN   
+SABVL         0.045249          NaN         5.0                  NaN   
+CANR          0.027149          3.0         2.0                  1.0   
 
-           L1_outdgree  YA_outdegree  Outdegree_difference  \
-Node                                                         
-AVFR               NaN          83.0                   NaN   
-RIMR              68.0          95.0                 -27.0   
-AIBL              97.0          97.0                   0.0   
-URYDL             75.0          67.0                   8.0   
-ALML              28.0          43.0                 -15.0   
-...                ...           ...                   ...   
-BWM-DR08           6.0          18.0                 -12.0   
-CANL               NaN           5.0                   NaN   
-CANR               3.0           2.0                   1.0   
-Fragment2          8.0           NaN                   NaN   
-SABVL              NaN           5.0                   NaN   
+          L1_outdgree  YA_outdegree  Outdegree_difference  Negative_closeness  \
+Node                                                                            
+IL1R             49.0          53.0                  -4.0            0.460648   
+ADLR             35.0          54.0                 -19.0            0.382692   
+RMDL             69.0          84.0                 -15.0            0.446188   
+SIAVL            57.0          73.0                 -16.0            0.427039   
+BWM-VL04         14.0          31.0                 -17.0            0.317891   
+...               ...           ...                   ...                 ...   
+BWM-DL06         19.0          19.0                   0.0            0.396414   
+BWM-VL07          4.0          19.0                 -15.0            0.345486   
+CANL              NaN           5.0                   NaN                 NaN   
+SABVL             NaN           5.0                   NaN                 NaN   
+CANR              3.0           2.0                   1.0            0.322006   
 
-           Negative_closeness  Positive_closeness  Delta_closeness  
-Node                                                                
-AVFR                      NaN            0.619597         0.615599  
-RIMR                 0.451247            0.626822         0.653846  
-AIBL                 0.512887            0.626822         0.680000  
-URYDL                0.484185            0.579515         0.615599  
-ALML                 0.408624            0.549872         0.562341  
-...                       ...                 ...              ...  
-BWM-DR08             0.322528            0.515588         0.515152  
-CANL                      NaN            0.415861         0.429126  
-CANR                 0.322006            0.365646         0.433333  
-Fragment2            0.406122                 NaN         0.479393  
-SABVL                     NaN            0.452632         0.464286  
+          Positive_closeness  Delta_closeness  
+Node                                           
+IL1R                0.558442         0.586207  
+ADLR                0.544304         0.563776  
+RMDL                0.607345         0.629630  
+SIAVL               0.598886         0.622535  
+BWM-VL04            0.532178         0.533816  
+...                      ...              ...  
+BWM-DL06            0.515588         0.526190  
+BWM-VL07            0.508274         0.515152  
+CANL                0.415861         0.429126  
+SABVL               0.452632         0.464286  
+CANR                0.365646         0.433333  
 
 [222 rows x 10 columns]
 </pre></div>
